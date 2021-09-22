@@ -104,11 +104,12 @@ void fill_env(char **envp, t_env *env)
     while(envp[i])
     {
         name_size = env_name_len(envp[i]);
-        tmp->name = malloc(name_size + 2);
+        tmp->name = malloc(name_size + 3);
         tmp->value = malloc(ft_strlen(envp[i]) - name_size + 1);
-        ft_strlcpy(tmp->name, envp[i], name_size + 2);
-        printf("%s \n", tmp->name);
+        ft_strlcpy(tmp->name, envp[i], name_size + 1);
+        //printf("%s = ", tmp->name);
         ft_strlcpy(tmp->value, envp[i] + name_size + 2, ft_strlen(envp[i]) - name_size + 1);
+        //printf("%s \n", tmp->value);
         if(envp[i + 1])
         {
             env->next = malloc(sizeof(t_env *));
@@ -139,8 +140,8 @@ int main (int argc, char **argv, char **envp)
     
     char *s[] = {"echo", NULL};
     env = malloc(sizeof(t_env *));
-    fill_env(envp, env);
-    //print_env(env);
+    fill_env(envp, &env);
+    print_env(env);
     while(1)
     {
         line = readline("$>");
