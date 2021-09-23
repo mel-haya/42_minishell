@@ -20,6 +20,19 @@ typedef struct s_env
     struct s_env   *next;
 }               t_env;
 
+void remove_char(char *str,int index)
+{
+    int i;
+
+    i = 0;
+    while (str[index + i])
+    {
+        str[index + i] = str[index + i + 1];
+        i++;
+    }
+
+}
+
 int skip_arg(char *cmd, int i)
 {
     char flag;
@@ -28,7 +41,9 @@ int skip_arg(char *cmd, int i)
     while (cmd[i])
     {
         if (!flag && (cmd[i] == ' ' || cmd[i] == '|'))
+        {
             return i;
+        }
         if (!flag && (cmd[i] == 34 || cmd[i] == 39))
         {
             flag = cmd[i];
@@ -40,6 +55,7 @@ int skip_arg(char *cmd, int i)
     }
     return i;
 }
+
 int get_args_num(char *cmd)
 {
     int i;
@@ -56,32 +72,36 @@ int get_args_num(char *cmd)
         while(cmd[i] == ' ')
             i++;
         if(cmd[i] == '|')
-            return args;
-        
+            return args;     
     }
     return args;
 }
 
-// char *get_args(char *cmd, t_command *cmds)
-// {
-//     int i;
-//     int j;
-//     int skip;
+void get_args(char *cmd, t_command *cmds)
+{
+    int i;
+    int j;
+    int skip;
 
-//     j = 0;
-//     i = 0;
-//     cmds->args = malloc(sizeof(char *) * (get_args_num(line) + 1));
-//     while(cmd[i] == ' ')
-//         i++;
-//     while(cmd[i])
-//     {
-//         skip = skip_arg(cmd, i);
-//         cmds->args[j] = malloc(skip - i + 1);
-//         ft_strlcpy(cmds->args[j],)
-        
-//     }
-
-// }
+    j = 0;
+    i = 0;
+    
+    printf("%d\n",get_args_num(cmd));
+    cmds->args = malloc((get_args_num(cmd) + 1) * sizeof(char *));
+    while(cmd[i] == ' ')
+        i++;
+    while(cmd[i])
+    {
+        skip = skip_arg(cmd, i);
+        cmds->args[j] = malloc(skip - i + 1);
+        ft_strlcpy(cmds->args[j], cmd + i, skip - i + 1);
+        i = skip;
+        while(cmd[i] == ' ')
+            i++;
+        j++;
+    }
+    cmds->args[get_args_num(cmd)] = NULL;
+}
 
 int env_name_len(char *env)
 {
@@ -107,16 +127,14 @@ void fill_env(char **envp, t_env *env)
         tmp->name = malloc(name_size + 3);
         tmp->value = malloc(ft_strlen(envp[i]) - name_size + 1);
         ft_strlcpy(tmp->name, envp[i], name_size + 1);
-        //printf("%s = ", tmp->name);
         ft_strlcpy(tmp->value, envp[i] + name_size + 2, ft_strlen(envp[i]) - name_size + 1);
-        //printf("%s \n", tmp->value);
         if(envp[i + 1])
         {
-            env->next = malloc(sizeof(t_env *));
-            env = env->next;
+            tmp->next = malloc(sizeof(t_env *));
+            tmp = tmp->next;
         }
         else
-            env->next = NULL;
+            tmp->next = NULL;
         i++;
     }
 }
@@ -126,32 +144,65 @@ void print_env(t_env *e)
     t_env *env = e;
     while(env)
     {
-        printf("%s = %s\n",env->name, env->value);
+        printf("%s=%s\n",env->name, env->value);
         env = env->next;
     } 
 }
 
-int main (int argc, char **argv, char **envp)
+void skip_quote(t_command *cmd)
+{
+    int i = 0;
+    int j;
+    int flag;
+
+    flag = 0;
+    while(cmd->args[i])
+    {
+        j = 0;
+        while(cmd->args[i][j])
+        {
+            if (!flag && (cmd->args[i][j] == 39 || cmd->args[i][j] == 34))
+            {
+                flag = cmd->args[i][j];
+                remove_char(cmd->args[i],j);
+            }
+            else if(cmd->args[i][j] == flag)
+            {
+                flag = 0;
+                remove_char(cmd->args[i],j);
+            }
+            j++;
+        }
+        if(flag)
+            printf("Error: Multiline\n");
+        i++;
+    }
+}
+
+int main(int argc, char **argv, char **envp)
 {
 
     t_command   *cmds;
     t_env       *env;
     char        *line;
-    
+
     char *s[] = {"echo", NULL};
     env = malloc(sizeof(t_env *));
-    fill_env(envp, &env);
-    print_env(env);
+    cmds = malloc(sizeof(cmds));
+    fill_env(envp, env);
     while(1)
-    {
+    {   
         line = readline("$>");
-        printf("%d\n", get_args_num(line));
-        int id = fork();
+        get_args(line, cmds);
+
+        skip_quote(cmds);
+        //printf("%s\n", cmd->args[i]);
+        int id;// = fork();
         if(id != 0)
             wait(NULL);
         else
         {
-            execve(line,NULL,envp);
+            execve(line,s,envp);
             return 0;
         }
     }
