@@ -68,7 +68,7 @@ void print_env()
 	} 
 }
 
-int replace_env(char **arg, int index)
+int expand_env(char **arg, int index)
 {
 	char	*after;
 	int		len;
