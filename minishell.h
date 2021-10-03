@@ -12,6 +12,8 @@ typedef struct	s_redirection
 	char	*file;
 	char	token;
 	int		append;
+	struct s_redirection *next;
+	
 }				t_redirection;
 
 
@@ -52,5 +54,6 @@ int		get_args_num(char *cmd);
 int		skip_arg(char *cmd, int i);
 int		remove_char(char *str,int index, int flag);
 int		remove_str(char **str,int i,int count);
-
+int		get_redirection(char **str, t_redirection *r, int i);
+int		get_redirections(char **str, t_command *cmd, int i);
 #endif

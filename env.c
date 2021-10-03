@@ -7,7 +7,7 @@ t_env	*get_env_by_name(char *name)
 
 	tmp = g_shell.env;
 	len = 0;
-	while(name[len] && (name[len] != 34 && name[len] != 39))
+	while(name[len] && (name[len] != 34 && name[len] != 39 && name[len] != ' '))
 		len++;
 	while(tmp)
 	{
@@ -18,7 +18,6 @@ t_env	*get_env_by_name(char *name)
 		}
 		tmp = tmp->next;
 	}
-	printf("%s\n",tmp->value);
 	return NULL;
 }
 
@@ -37,19 +36,21 @@ void fill_env(char **envp)
 	int i;
 	t_env *tmp;
 	int name_size;
+	int test;
 
 	tmp = g_shell.env;
 	i = 0;
 	while(envp[i])
 	{
 		name_size = env_name_len(envp[i]);
-		tmp->name = malloc(name_size + 3);
-		tmp->value = malloc(ft_strlen(envp[i]) - name_size + 1);
+		tmp->name = malloc(name_size + 1);
+		test = (ft_strlen(envp[i]) - name_size);
+		tmp->value = malloc(test);
 		ft_strlcpy(tmp->name, envp[i], name_size + 1);
 		ft_strlcpy(tmp->value, envp[i] + name_size + 1, ft_strlen(envp[i]) - name_size + 1);
 		if(envp[i + 1])
 		{
-			tmp->next = malloc(sizeof(t_env *));
+			tmp->next = malloc(sizeof(t_env));
 			tmp = tmp->next;
 		}
 		else
@@ -63,6 +64,7 @@ void print_env()
 	t_env *env = g_shell.env;
 	while(env)
 	{
+		
 		printf("%s=%s\n",env->name, env->value);
 		env = env->next;
 	} 
@@ -77,11 +79,13 @@ int expand_env(char **arg, int index)
 	char	*new;
 
 	env = get_env_by_name((*arg) + index + 1);
+	after = (*arg) + index + 1;
 	if (!env)
 		value = "";
-	else	
+	else
 		value = env->value;
-	after = (*arg) + index + ft_strlen(env->name) + 1;
+	while(*after && (*after != 34 && *after != 39 && *after != ' '))
+		after++;
 	len = index + ft_strlen(value) + ft_strlen(after) + 2;
 	new = malloc(len);
 	ft_strlcpy(new, *arg, index + 1);
@@ -89,5 +93,5 @@ int expand_env(char **arg, int index)
 	ft_strlcpy(new + index + ft_strlen(value), after, ft_strlen(after) + 1);
 	free(*arg);
 	*arg = new;
-	return index + ft_strlen(env->value);
+	return index + ft_strlen(value);
 }
