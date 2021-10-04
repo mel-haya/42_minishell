@@ -17,6 +17,15 @@ int get_cmds(char **cmd)
 		quote_args(tmp);
 		if((*cmd)[i] == '|')
 		{
+			i++;
+			while((*cmd)[i] == ' ')
+				i++;
+			if((*cmd)[i] == 0)
+			{
+				printf("Error: Multiline\n");
+				tmp->next = NULL;
+				return -1;
+			}
 			tmp->next = malloc(sizeof(t_command));
 			tmp = tmp->next;
 			i++;
@@ -24,6 +33,7 @@ int get_cmds(char **cmd)
 		else
 			tmp->next = NULL;	
 	}
+	return 0;
 }
 
 void free_cmds()
@@ -111,6 +121,12 @@ int main(int argc, char **argv, char **envp)
 		line = readline("$>");
 		g_shell.cmds = malloc(sizeof(t_command));
 		add_history(line);
+		if(!line[0])
+		{
+			free(g_shell.cmds);
+			free(line);
+			continue;
+		}
 		if(get_cmds(&line) == -1)
 			continue;
 		print_commands();
