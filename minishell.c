@@ -1,40 +1,15 @@
 #include "minishell.h"
 
-// int validate_token(char *line)
-// {
-// 	int i;
-
-// 	i = 0;
-
-// }
-
-// int	get_redirections(char *line, t_command *cmd)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	cmd->redirection = malloc(sizeof(t_redirection *));
-// 	cmd->redirection->token = *line;
-// 	if(line[1] == line[0])
-// 		cmd->redirection->token = 1;
-// 	else if(line[0] == line[0] )
-// 	else
-// 		cmd->redirection->token = 0;
-
-// 	while(line[i])
-// }
-
-
 int get_cmds(char **cmd)
 {
 	int i;
 	t_command *tmp;
 
 	i = 0;
-	tmp = g_shell.cmds;
-	g_shell.cmds->redirection = NULL;
+	tmp = g_shell.cmds;	
 	while((*cmd)[i])
 	{
+		tmp->redirection = NULL;
 		if (get_redirections(cmd, tmp, i) == -1)
 			return -1;
 		//printf("%s\n", *cmd);
@@ -51,6 +26,33 @@ int get_cmds(char **cmd)
 	}
 }
 
+void free_cmds()
+{
+	t_command *tmp;
+	t_redirection *red;
+	int i;
+ 
+	while(g_shell.cmds)
+	{
+		i = 0;
+		while((g_shell.cmds->args)[i])
+		{
+			free((g_shell.cmds->args)[i]);
+			i++;
+		}
+		free(g_shell.cmds->args);
+		while(g_shell.cmds->redirection)
+		{
+			red = g_shell.cmds->redirection->next;
+			free(g_shell.cmds->redirection->file);
+			free(g_shell.cmds->redirection);
+			g_shell.cmds->redirection = red;
+		}
+		tmp = g_shell.cmds->next;
+		free(g_shell.cmds);
+		g_shell.cmds = tmp;
+	}
+}
 
 void print_redirection(t_redirection *r)
 {
@@ -84,25 +86,36 @@ void print_commands()
 	printf("\n");
 }
 
+int init_global()
+{
+	g_shell.env = malloc(sizeof(t_env));
+	if (!g_shell.env || !g_shell.cmds)
+		return (1);
+	g_shell.status = 0;
+	g_shell.heredocn = 0;
+	return (0);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 
 	char        *line;
 	int i;
 	char *s[] = {"echo", NULL};
-	g_shell.env = malloc(sizeof(t_env));
-	g_shell.cmds = malloc(sizeof(t_command));
-	g_shell.status = 0;
+
+	init_global();
 	fill_env(envp);
 	//print_env();
 	while(1)
 	{   
 		line = readline("$>");
+		g_shell.cmds = malloc(sizeof(t_command));
 		add_history(line);
 		if(get_cmds(&line) == -1)
 			continue;
 		print_commands();
 		free(line);
+		free_cmds();
 		int id ;//= fork();
 		if(id != 0)
 			wait(NULL);

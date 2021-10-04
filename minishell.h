@@ -39,6 +39,7 @@ typedef struct  s_global
 	t_command   *cmds;
 	t_env       *env;
 	int         status;
+	int			heredocn;
 }               t_global;
 
 t_global g_shell;
@@ -56,4 +57,6 @@ int		remove_char(char *str,int index, int flag);
 int		remove_str(char **str,int i,int count);
 int		get_redirection(char **str, t_redirection *r, int i);
 int		get_redirections(char **str, t_command *cmd, int i);
+int		new_env(char *name, char *value);
+
 #endif
