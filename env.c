@@ -21,6 +21,20 @@ t_env	*get_env_by_name(char *name)
 	return NULL;
 }
 
+int new_env(char *name, char *value)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	if(!new)
+		return (-1);
+	new->name = name;
+	new->value = value;
+	new->next = g_shell.env;
+	g_shell.env = new;
+	return (0);
+}
+
 int env_name_len(char *env)
 {
 	int i;

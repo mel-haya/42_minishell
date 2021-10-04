@@ -101,29 +101,13 @@ int main(int argc, char **argv, char **envp)
 		add_history(line);
 		if(get_cmds(&line) == -1)
 			continue;
-
-	// 	//get_redirection(&line, g_shell.cmds->redirection, 0);
-	// 	printf("%s\n",g_shell.cmds->redirection->file);
-	// 	//get_env_by_name(line);
-	 	//i = 0;
 		print_commands();
-		// while(g_shell.cmds)
-		// {
-		// 	i = 0;
-		// 	// while(g_shell.cmds->args[i])
-		// 	// {
-		// 	// 	printf("%s\n",g_shell.cmds->args[i]);
-		// 	// 	i++;
-		// 	// }
-		// 	print_redirection(g_shell.cmds->redirection);
-		// }
 		free(line);
 		int id ;//= fork();
 		if(id != 0)
 			wait(NULL);
 		else
 		{
-			//execve(line,s,envp);
 			return 0;
 		}
 	}
