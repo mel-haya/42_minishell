@@ -92,6 +92,7 @@ int main(int argc, char **argv, char **envp)
 	char *s[] = {"echo", NULL};
 	g_shell.env = malloc(sizeof(t_env));
 	g_shell.cmds = malloc(sizeof(t_command));
+	g_shell.status = 0;
 	fill_env(envp);
 	//print_env();
 	while(1)

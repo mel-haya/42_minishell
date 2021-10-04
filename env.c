@@ -70,6 +70,25 @@ void print_env()
 	} 
 }
 
+int expand_status(char **arg, int index)
+{
+	char	*value;
+	char	*new;
+	int ret;
+
+
+	value = ft_itoa(g_shell.status);
+	ret = index + ft_strlen(value);
+	new = malloc(ft_strlen(*arg) + ft_strlen(value) - 1);
+	ft_strlcpy(new, *arg, index + 1);
+	ft_strlcpy(new + index, value, ft_strlen(value) + 1);
+	ft_strlcpy(new + index + ft_strlen(value), (*arg) + index + 2 , ft_strlen((*arg) + index + 2) + 1);
+	free(*arg);
+	free(value);
+	*arg = new;
+	return ret;
+}
+
 int expand_env(char **arg, int index)
 {
 	char	*after;
@@ -78,6 +97,8 @@ int expand_env(char **arg, int index)
 	t_env	*env;
 	char	*new;
 
+	if((*arg)[index + 1] == '?')
+		return (expand_status(arg, index));
 	env = get_env_by_name((*arg) + index + 1);
 	after = (*arg) + index + 1;
 	if (!env)
