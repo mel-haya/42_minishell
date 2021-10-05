@@ -129,7 +129,8 @@ int main(int argc, char **argv, char **envp)
 		}
 		if(get_cmds(&line) == -1)
 			continue;
-		print_commands();
+		//print_commands();
+		here_doc(line);
 		free(line);
 		free_cmds();
 		int id ;//= fork();

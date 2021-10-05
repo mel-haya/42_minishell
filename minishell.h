@@ -5,7 +5,9 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
 # include "libft/libft.h"
+
 
 typedef struct	s_redirection
 {
@@ -58,5 +60,6 @@ int		remove_str(char **str,int i,int count);
 int		get_redirection(char **str, t_redirection *r, int i);
 int		get_redirections(char **str, t_command *cmd, int i);
 int		new_env(char *name, char *value);
+int		here_doc(char *str);
 
 #endif
