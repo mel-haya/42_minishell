@@ -141,7 +141,7 @@ int main(int argc, char **argv, char **envp)
 	{   
 		set_global_signals();
 		g_shell.heredocn = 0;
-		line = readline("\001\e[32m\033[1m\002$>\001\e[0m\033[0m\002 ");
+		line = readline("\001\e[32m\033[1m\002minishell%\001\e[0m\033[0m\002 ");
 		g_shell.cmds = malloc(sizeof(t_command));
 		add_history(line);
 		if(!line)

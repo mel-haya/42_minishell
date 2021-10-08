@@ -7,7 +7,7 @@ t_env	*get_env_by_name(char *name)
 
 	tmp = g_shell.env;
 	len = 0;
-	while(name[len] && (name[len] != 34 && name[len] != 39 && name[len] != ' '))
+	while(name[len] && (name[len] != 34 && name[len] != 39 && name[len] != ' ' && name[len] != '$'))
 		len++;
 	while(tmp)
 	{
@@ -119,7 +119,7 @@ int expand_env(char **arg, int index)
 		value = "";
 	else
 		value = env->value;
-	while(*after && (*after != 34 && *after != 39 && *after != ' '))
+	while(*after && (*after != 34 && *after != 39 && *after != ' ' && *after != '$'))
 		after++;
 	len = index + ft_strlen(value) + ft_strlen(after) + 2;
 	new = malloc(len);
