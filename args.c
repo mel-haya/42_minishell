@@ -148,6 +148,7 @@ int get_redirections(char **str, t_command *cmd, int i)
 	}
 	if(flag)
 		tmp->next = NULL;
+	return 0;
 }
 
 int get_redirection(char **str, t_redirection *r, int i)
@@ -176,4 +177,5 @@ int get_redirection(char **str, t_redirection *r, int i)
 		r->file = here_doc(r->file);
 	remove_quotes(&(r->file));
 	remove_str(str, i, len - i);
+	return 0;
 }
