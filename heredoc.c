@@ -73,11 +73,14 @@ char *here_doc(char *str)
     int mode;
     int fd;
     int pid;
+    char *file;
 
     fd = 0;
     mode = get_delimeter(str);
+    file = ft_itoa(g_shell.heredocn);
     //printf("%d -> %s\n", mode, str);
     //unlink to delete tmp file
+    g_shell.heredocn++;
     if(mode == -1)
     {
         printf("Error : Multiline\n");
@@ -87,7 +90,7 @@ char *here_doc(char *str)
     pid = fork();
     if(!pid)
     {
-        fd = open("test", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+        fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
         input_to_file(fd, str, mode);
         close(fd);
         free(str);
@@ -96,5 +99,5 @@ char *here_doc(char *str)
     else
         wait(NULL);
     set_global_signals();
-    return ft_strdup("test");
+    return file;
 }

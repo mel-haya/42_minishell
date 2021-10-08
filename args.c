@@ -91,7 +91,7 @@ int remove_quotes(char **s)
 			flag = remove_char((*s), i, flag);
 		else if((*s)[i] == flag)				
 			flag = remove_char((*s), i, flag);
-		else if (flag != 39 && (*s)[i] == '$')
+		else if (flag != 39 && (*s)[i] == '$' && (*s)[i + 1] && (*s)[i + 1] != '$')
 			i = expand_env(s, i);
 			else
 		i++;

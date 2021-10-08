@@ -103,7 +103,7 @@ int init_global()
 	if (!g_shell.env || !g_shell.cmds)
 		return (1);
 	g_shell.status = 0;
-	g_shell.heredocn = 0;
+	
 	return (0);
 }
 
@@ -140,6 +140,7 @@ int main(int argc, char **argv, char **envp)
 	while(1)
 	{   
 		set_global_signals();
+		g_shell.heredocn = 0;
 		line = readline("\001\e[32m\033[1m\002$>\001\e[0m\033[0m\002 ");
 		g_shell.cmds = malloc(sizeof(t_command));
 		add_history(line);
@@ -156,7 +157,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		if(get_cmds(&line) == -1)
 			continue;
-		//print_commands();
+		print_commands();
 		//here_doc(line);
 		free(line);
 		free_cmds();
