@@ -172,6 +172,8 @@ int get_redirection(char **str, t_redirection *r, int i)
 	len = skip_arg(*str, j);
 	r->file = malloc(len - j + 1);
 	ft_strlcpy(r->file, (*str) + j, len - j + 1);
+	if (r->token == '<' && r->append)
+		r->file = here_doc(r->file);
 	remove_quotes(&(r->file));
 	remove_str(str, i, len - i);
 }

@@ -5,9 +5,10 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <fcntl.h>
 # include "libft/libft.h"
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 typedef struct	s_redirection
 {
@@ -38,6 +39,7 @@ typedef struct s_env
 
 typedef struct  s_global
 {
+	int is_forked;
 	t_command   *cmds;
 	t_env       *env;
 	int         status;
@@ -60,6 +62,7 @@ int		remove_str(char **str,int i,int count);
 int		get_redirection(char **str, t_redirection *r, int i);
 int		get_redirections(char **str, t_command *cmd, int i);
 int		new_env(char *name, char *value);
-int		here_doc(char *str);
+char	*here_doc(char *str);
+void set_global_signals();
 
 #endif

@@ -99,6 +99,7 @@ void print_commands()
 int init_global()
 {
 	g_shell.env = malloc(sizeof(t_env));
+	g_shell.is_forked = 0;
 	if (!g_shell.env || !g_shell.cmds)
 		return (1);
 	g_shell.status = 0;
@@ -106,6 +107,26 @@ int init_global()
 	return (0);
 }
 
+void global_sig_handler(int sig)
+{
+	if(sig == SIGINT && !g_shell.is_forked)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("",0);
+		rl_redisplay();
+	}
+	else if(sig == SIGINT && g_shell.is_forked)
+	{
+		printf("\n");
+		exit(1);
+	}	
+}
+void set_global_signals()
+{
+	signal(SIGINT, global_sig_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
 int main(int argc, char **argv, char **envp)
 {
 
@@ -118,9 +139,15 @@ int main(int argc, char **argv, char **envp)
 	//print_env();
 	while(1)
 	{   
-		line = readline("$>");
+		set_global_signals();
+		line = readline("\001\e[32m\033[1m\002$>\001\e[0m\033[0m\002 ");
 		g_shell.cmds = malloc(sizeof(t_command));
 		add_history(line);
+		if(!line)
+		{
+			printf("exit\n");
+			exit(1);
+		}
 		if(!line[0])
 		{
 			free(g_shell.cmds);
@@ -130,7 +157,7 @@ int main(int argc, char **argv, char **envp)
 		if(get_cmds(&line) == -1)
 			continue;
 		//print_commands();
-		here_doc(line);
+		//here_doc(line);
 		free(line);
 		free_cmds();
 		int id ;//= fork();

@@ -45,30 +45,56 @@ int input_to_file(int fd, char *delimeter, int mode)
 {
     char *line;
     
+    g_shell.is_forked = 1;
     while(1)
     {
-        line = readline(">");
+        line = readline("heredoc>");
         if(!ft_strncmp(line,delimeter,ft_strlen(line)))
             return 0;
         if(!mode)
             expand_line(&line);
         write(fd, line,ft_strlen(line));
+        free(line);
         write(fd, "\n",1);
     }
 }
 
-int here_doc(char *str)
+void heredoc_sig_handler(int sig)
+{
+    if(sig == SIGINT && g_shell.is_forked)
+	{
+        printf("\n");
+        exit(1);
+	}
+}
+
+char *here_doc(char *str)
 {
     int mode;
     int fd;
+    int pid;
 
+    fd = 0;
     mode = get_delimeter(str);
     //printf("%d -> %s\n", mode, str);
+    //unlink to delete tmp file
     if(mode == -1)
     {
         printf("Error : Multiline\n");
-        return (mode);
+        return (NULL);
     }
-    fd = open("test", O_TMPFILE | O_WRONLY, 0777);
-    input_to_file(fd, str, mode);
+    signal(SIGINT, heredoc_sig_handler);
+    pid = fork();
+    if(!pid)
+    {
+        fd = open("test", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+        input_to_file(fd, str, mode);
+        close(fd);
+        free(str);
+        return 0;
+    }
+    else
+        wait(NULL);
+    set_global_signals();
+    return ft_strdup("test");
 }
