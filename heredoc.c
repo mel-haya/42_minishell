@@ -68,6 +68,18 @@ void heredoc_sig_handler(int sig)
 	}
 }
 
+char *here_doc_name()
+{
+    char *tmp;
+    char *ret;
+
+    tmp = ft_itoa(g_shell.heredocn);
+    ret = ft_strjoin("tmp/.", tmp);
+    g_shell.heredocn++;
+    free(tmp);
+    return ret;
+}
+
 char *here_doc(char *str)
 {
     int mode;
@@ -77,10 +89,7 @@ char *here_doc(char *str)
 
     fd = 0;
     mode = get_delimeter(str);
-    file = ft_itoa(g_shell.heredocn);
-    //printf("%d -> %s\n", mode, str);
-    //unlink to delete tmp file
-    g_shell.heredocn++;
+    file = here_doc_name();
     if(mode == -1)
     {
         printf("Error : Multiline\n");
@@ -93,11 +102,11 @@ char *here_doc(char *str)
         fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
         input_to_file(fd, str, mode);
         close(fd);
-        free(str);
-        return 0;
+        exit(0);
     }
     else
         wait(NULL);
+    free(str);
     set_global_signals();
     return file;
 }

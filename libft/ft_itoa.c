@@ -3,69 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/16 15:55:51 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/05 09:23:53 by mhalli           ###   ########.fr       */
+/*   Created: 2019/10/14 22:10:07 by mel-haya          #+#    #+#             */
+/*   Updated: 2019/10/19 18:57:37 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		size_to_allocate(int n)
+static	int	ft_numlen(int num)
 {
-	int		i;
+	int		output;
+	long	a;
 
-	i = 0;
-	if (n == 0)
+	if (num == 0)
 		return (1);
-	if (n < 0)
+	a = 1;
+	output = 0;
+	if (num < 0)
+		output++;
+	while (num / a)
 	{
-		n = n * (-1);
-		i++;
+		output++;
+		a *= 10;
 	}
-	while (n > 0)
-	{
-		n = n / 10;
-		i++;
-	}
-	return (i);
+	return (output);
 }
 
-char	*ft_more(char *num, int n, int j)
+char		*ft_itoa(int n)
 {
+	char			*result;
+	int				len;
+	unsigned int	num;
+
+	len = ft_numlen(n);
+	result = malloc(len + 1);
 	if (n < 0)
-	{
-		num[0] = '-';
-		n = n * -1;
-		while (j + 1 > 1)
-		{
-			num[j--] = (n % 10) + 48;
-			n /= 10;
-		}
-	}
+		num = -n;
 	else
+		num = n;
+	if (!result)
+		return (NULL);
+	result[len] = 0;
+	len--;
+	while (len >= 0)
 	{
-		while (j + 1 > 0)
-		{
-			num[j--] = (n % 10) + 48;
-			n = n / 10;
-		}
+		result[len] = num % 10 + 48;
+		num /= 10;
+		len--;
 	}
-	return (num);
-}
-
-char	*ft_itoa(int n)
-{
-	int		j;
-	char	*num;
-
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	if (!(num = (char *)malloc(sizeof(char) * (size_to_allocate(n) + 1))))
-		return (0);
-	j = size_to_allocate(n);
-	num[j] = '\0';
-	j--;
-	return (ft_more(num, n, j));
+	if (n < 0)
+		result[0] = '-';
+	return (result);
 }

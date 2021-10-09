@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memcmp.c                                           :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/13 13:44:05 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/06 08:22:51 by mhalli           ###   ########.fr       */
+/*   Created: 2019/10/10 18:54:08 by mel-haya          #+#    #+#             */
+/*   Updated: 2019/10/20 00:14:21 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_memcmp(const void *s1, const void *s2, size_t n)
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	unsigned int			i;
-	unsigned int			result;
-	const unsigned char		*p1;
-	const unsigned char		*p2;
+	unsigned char	*str1;
+	unsigned char	*str2;
+	int				i;
+	int				len;
 
+	len = n;
 	i = 0;
-	p1 = (const unsigned char *)s1;
-	p2 = (const unsigned char *)s2;
-	result = 0;
-	while (n--)
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	while (i < len)
 	{
-		if (p1[i] != p2[i])
-		{
-			result = (p1[i] - p2[i]);
-			return (result);
-		}
+		if (str1[i] != str2[i])
+			return (str1[i] - str2[i]);
 		i++;
 	}
-	return (result);
+	return (0);
 }

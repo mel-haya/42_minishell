@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/19 20:30:43 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/06 08:12:34 by mhalli           ###   ########.fr       */
+/*   Created: 2019/10/11 17:49:35 by mel-haya          #+#    #+#             */
+/*   Updated: 2019/10/25 07:49:00 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,17 @@
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	int				i;
-	int				result;
-	unsigned char	*s;
-	unsigned char	*d;
+	int				len;
+	unsigned char	*ps1;
+	unsigned char	*ps2;
 
-	s = (unsigned char *)s2;
-	d = (unsigned char *)s1;
+	ps1 = (unsigned char *)s1;
+	ps2 = (unsigned char *)s2;
+	len = n;
 	i = 0;
-	result = 0;
-	while (n-- && (s[i] != '\0' || d[i] != '\0'))
-	{
-		if (d[i] != s[i] && (s[i] != '\0' || d[i] != '\0'))
-		{
-			result = (d[i] - s[i]);
-			return (result);
-		}
+	if (n == 0)
+		return (0);
+	while (ps1[i] == ps2[i] && i < len - 1 && ps1[i] != 0)
 		i++;
-	}
-	return (result);
+	return (ps1[i] - ps2[i]);
 }

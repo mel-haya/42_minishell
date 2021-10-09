@@ -3,77 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/29 02:20:09 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/06 08:17:52 by mhalli           ###   ########.fr       */
+/*   Created: 2019/10/12 21:52:06 by mel-haya          #+#    #+#             */
+/*   Updated: 2019/10/24 22:59:41 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_trim1(const char *s1, const char *s2)
+static	int	ft_checkset(char c, char const *set)
 {
-	int		i;
-	int		j;
+	int i;
 
 	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (0);
-	while (s1[i] != '\0' && ft_strchr(s2, s1[i]))
+	while (set[i])
 	{
+		if (c == set[i])
+			return (1);
 		i++;
 	}
-	return (i);
+	return (0);
 }
 
-int		ft_trim2(const char *s1, const char *s2)
+char		*ft_strtrim(char const *s1, char const *set)
 {
-	int		i;
-
-	i = ft_strlen(s1);
-	if (!s1 || !s2)
-		return (0);
-	while (ft_strrchr(s2, s1[i - 1]))
-	{
-		i--;
-		if (i == 0)
-			return (0);
-	}
-	return (i);
-}
-
-char	*error(int f, int s, char const *s1)
-{
-	char	*b;
-
-	if (f > 1)
-	{
-		if (!(b = (char *)malloc(sizeof(char) * f)))
-			return (NULL);
-		ft_strlcpy(b, s1 + s, f);
-	}
-	else
-	{
-		if (!(b = (char *)malloc(sizeof(char) * 1)))
-			return (NULL);
-		b[0] = 0;
-	}
-	return (b);
-}
-
-char	*ft_strtrim(char const *s1, char const *set)
-{
-	int		s;
-	int		f;
+	int i;
+	int j;
 
 	if (!s1)
 		return (NULL);
 	if (!set)
-		return (ft_strdup((char *)s1));
-	s = ft_trim1(s1, set);
-	f = ft_trim2(s1, set);
-	f = f - s + 1;
-	return (error(f, s, s1));
+		return ((char *)s1);
+	i = 0;
+	j = ft_strlen(s1) - 1;
+	while (s1[i] && ft_checkset(s1[i], set))
+		i++;
+	while (i < j && ft_checkset(s1[j], set))
+		j--;
+	return (ft_substr(s1, i, j - i + 1));
 }

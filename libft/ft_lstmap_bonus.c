@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/12 13:34:06 by mel-haya          #+#    #+#             */
-/*   Updated: 2019/10/12 18:02:13 by mel-haya         ###   ########.fr       */
+/*   Created: 2019/10/23 07:26:24 by mel-haya          #+#    #+#             */
+/*   Updated: 2019/10/27 18:32:58 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalpha(int c)
+#include "libft.h"
+
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
-		return (1);
-	return (0);
+	t_list *first;
+	t_list *a;
+
+	first = ft_lstnew(f(lst));
+	if (!lst || !f)
+		return (NULL);
+	a = first;
+	while (lst->next)
+	{
+		lst = lst->next;
+		if (!(a->next = ft_lstnew(f(lst))))
+		{
+			ft_lstclear(&a, del);
+			return (NULL);
+		}
+		a = a->next;
+	}
+	return (first);
 }

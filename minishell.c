@@ -17,9 +17,9 @@ int get_cmds(char **cmd)
 		quote_args(tmp);
 		if((*cmd)[i] == '|')
 		{
-			i++;
-			while((*cmd)[i] == ' ')
-				i++;
+			
+			// while((*cmd)[i] == ' ')
+			// 	i++;
 			if((*cmd)[i] == 0)
 			{
 				printf("Error: Multiline\n");

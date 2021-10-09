@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <unistd.h>
+# include <string.h>
 # include <stdio.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
