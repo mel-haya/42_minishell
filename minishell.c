@@ -10,6 +10,8 @@ int get_cmds(char **cmd)
 	while((*cmd)[i])
 	{
 		tmp->redirection = NULL;
+		tmp->args = NULL;
+		tmp->next = NULL;
 		if (get_redirections(cmd, tmp, i) == -1)
 			return -1;
 		//printf("%s\n", *cmd);
@@ -30,8 +32,6 @@ int get_cmds(char **cmd)
 			tmp = tmp->next;
 			i++;
 		}
-		else
-			tmp->next = NULL;	
 	}
 	return 0;
 }
@@ -43,17 +43,24 @@ void free_cmds()
 	int i;
  
 	while(g_shell.cmds)
-	{
-		i = 0;
-		while((g_shell.cmds->args)[i])
+	{		
+		if((g_shell.cmds->args))
 		{
-			free((g_shell.cmds->args)[i]);
-			i++;
+			i = 0;
+			while((g_shell.cmds->args)[i])
+			{
+				free((g_shell.cmds->args)[i]);
+				i++;
+			}
+			free(g_shell.cmds->args);
 		}
-		free(g_shell.cmds->args);
+		
 		while(g_shell.cmds->redirection)
 		{
 			red = g_shell.cmds->redirection->next;
+			if(g_shell.cmds->redirection->token == '<' &&
+			g_shell.cmds->redirection->append)
+				unlink(g_shell.cmds->redirection->file);
 			free(g_shell.cmds->redirection->file);
 			free(g_shell.cmds->redirection);
 			g_shell.cmds->redirection = red;
@@ -156,7 +163,10 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		}
 		if(get_cmds(&line) == -1)
+		{
+			free_cmds();
 			continue;
+		}
 		print_commands();
 		//here_doc(line);
 		free(line);

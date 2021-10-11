@@ -151,6 +151,20 @@ int get_redirections(char **str, t_command *cmd, int i)
 	return 0;
 }
 
+int check_file(char *f)
+{
+	int fd;
+
+	fd = open(f, O_WRONLY | O_TRUNC, 0644);
+	if(fd == -1)
+	{
+		printf("minishell: %s: No such file or directory\n",f);
+		return (0);
+	}
+	else
+		return (1);
+}
+
 int get_redirection(char **str, t_redirection *r, int i)
 {
 	int j;
@@ -177,5 +191,7 @@ int get_redirection(char **str, t_redirection *r, int i)
 		r->file = here_doc(r->file);
 	remove_quotes(&(r->file));
 	remove_str(str, i, len - i);
+	if(!check_file(r->file))
+		return (-1);
 	return 0;
 }

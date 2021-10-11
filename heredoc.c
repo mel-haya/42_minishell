@@ -49,6 +49,11 @@ int input_to_file(int fd, char *delimeter, int mode)
     while(1)
     {
         line = readline("heredoc>");
+        if(!line)
+        {
+            printf("\nminishell: warning: here-document at line 12 delimited by end-of-file (wanted '%s')\n",delimeter);
+            return 1;
+        }
         if(!ft_strncmp(line,delimeter,ft_strlen(line)))
             return 0;
         if(!mode)
@@ -61,7 +66,7 @@ int input_to_file(int fd, char *delimeter, int mode)
 
 void heredoc_sig_handler(int sig)
 {
-    if(sig == SIGINT && g_shell.is_forked)
+            if(sig == SIGINT && g_shell.is_forked)
 	{
         printf("\n");
         exit(1);

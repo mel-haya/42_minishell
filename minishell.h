@@ -25,7 +25,6 @@ typedef struct s_command
 {
 	char **args;
 	t_redirection *redirection;
-	int i;
 	struct s_command *next;
 }               t_command;
 
