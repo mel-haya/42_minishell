@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <unistd.h>
+# include <signal.h>
+# include <termios.h>
 # include <string.h>
 # include <stdio.h>
 # include <sys/wait.h>
@@ -10,6 +12,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#include "execution/execution.h"
 
 typedef struct	s_redirection
 {
@@ -25,6 +29,7 @@ typedef struct s_command
 {
 	char **args;
 	t_redirection *redirection;
+	int i;
 	struct s_command *next;
 }               t_command;
 
@@ -63,6 +68,22 @@ int		get_redirection(char **str, t_redirection *r, int i);
 int		get_redirections(char **str, t_command *cmd, int i);
 int		new_env(char *name, char *value);
 char	*here_doc(char *str);
-void set_global_signals();
+void	set_global_signals();
+void	heredoc_sig_handler(int sig);
+void	global_sig_handler(int sig);
+
+//-------------ENV MANIPULATION--------------//
+
+int		find_key(t_env *env, char *target);
+void	change_key_value(t_env *env, char *key_target, char *new_value);
+char	*get_key_value(t_env *env, char *key_target);
+void	add_key_value(t_env *env, char *key, char *value);
+
+//--------------NODE UTILS-----------------//
+
+void	add_node(t_env **lst, t_env *new_node);
+t_env	*init_node(char *key, char *value);
+
+//------------------------------------------//
 
 #endif

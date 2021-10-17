@@ -114,32 +114,40 @@ int init_global()
 	return (0);
 }
 
-void ignctl()
+void global_sig_handler(int sig)
 {
-	struct termios term;
-
-	if (tcgetattr(STDIN_FILENO, &term) != 0)
-    perror("tcgetattr() error");
-	term.c_lflag &= ~ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) != 0)
-      perror("tcsetattr() error");
+	if(sig == SIGINT && !g_shell.is_forked)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("",0);
+		rl_redisplay();
+	}
+	else if(sig == SIGINT && g_shell.is_forked)
+	{
+		printf("\n");
+		exit(1);
+	}	
 }
-
+void set_global_signals()
+{
+	signal(SIGINT, global_sig_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
 int main(int argc, char **argv, char **envp)
 {
 
 	char        *line;
 	int i;
+	char *s[] = {"echo", NULL};
 
 	init_global();
 	fill_env(envp);
-	ignctl();
 	//print_env();
 	while(1)
-	{
+	{   
 		set_global_signals();
 		g_shell.heredocn = 0;
-		g_shell.status = 0;
 		line = readline("\001\e[32m\033[1m\002minishell%\001\e[0m\033[0m\002 ");
 		g_shell.cmds = malloc(sizeof(t_command));
 		add_history(line);
@@ -159,11 +167,17 @@ int main(int argc, char **argv, char **envp)
 			free_cmds();
 			continue;
 		}
-		// print_commands();
-		execution();
+		print_commands();
 		//here_doc(line);
 		free(line);
 		free_cmds();
+		int id ;//= fork();
+		if(id != 0)
+			wait(NULL);
+		else
+		{
+			return 0;
+		}
 	}
 	return 0;
 }

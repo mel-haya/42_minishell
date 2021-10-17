@@ -189,6 +189,8 @@ int get_redirection(char **str, t_redirection *r, int i)
 	ft_strlcpy(r->file, (*str) + j, len - j + 1);
 	if (r->token == '<' && r->append)
 		r->file = here_doc(r->file);
+	if(!r->file)
+		return -1;
 	remove_quotes(&(r->file));
 	remove_str(str, i, len - i);
 	if(!check_file(r->file))

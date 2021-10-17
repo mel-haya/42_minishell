@@ -64,15 +64,6 @@ int input_to_file(int fd, char *delimeter, int mode)
     }
 }
 
-void heredoc_sig_handler(int sig)
-{
-            if(sig == SIGINT && g_shell.is_forked)
-	{
-        printf("\n");
-        exit(1);
-	}
-}
-
 char *here_doc_name()
 {
     char *tmp;
@@ -110,7 +101,9 @@ char *here_doc(char *str)
         exit(0);
     }
     else
-        wait(NULL);
+        wait(&g_shell.status);
+    if(g_shell.status)
+        return NULL;
     free(str);
     set_global_signals();
     return file;
