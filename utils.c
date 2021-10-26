@@ -6,7 +6,7 @@
 /*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/21 11:33:42 by mourad           ###   ########.fr       */
+/*   Updated: 2021/10/26 18:19:00 by mourad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,21 @@ int	is_token(char c)
 		return (0);
 }
 
-int	check_file(char *f)
+int	check_file(t_redirection *r)
 {
 	int	fd;
 
-	fd = open(f, O_RDONLY, 0644);
-	if (fd == -1)
+	fd = open(r->file, O_RDONLY, 0644);
+	close(fd);
+	if (fd == -1 && r->token == '>')
 	{
-		printf("minishell: %s: No such file or directory\n", f);
+		fd = open(r->file, O_RDONLY | O_CREAT, 0644);
+		close(fd);
+		return(1);
+	}
+	else if (fd == -1)
+	{
+		printf("minishell: %s: No such file or directory\n", r->file);
 		return (0);
 	}
 	else
