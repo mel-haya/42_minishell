@@ -18,17 +18,17 @@ SRC = execution/execution.c execution/utils.c execution/lst_constructor.c execut
 	execution/builtins/export_builtin.c execution/builtins/unset_builtin.c execution/builtins/env_builtin.c \
 	execution/builtins/exit_builtin.c \
 	\
-	minishell.c env.c args.c utils.c heredoc.c signals.c\
+	minishell.c env.c args.c utils.c heredoc.c signals.c redirection_parse.c free_all.c
 
 all: $(NAME)
 
 $(NAME):
-	$(MAKE) -C libft/
-	@gcc $(SRC) -lreadline libft/libft.a -o $(NAME) -g
+	@$(MAKE) -s -C libft/
+	@gcc $(SRC) -lreadline libft/libft.a -ltermcap -o $(NAME) -g -fsanitize=address
 
 
 clean:
-	$(MAKE) -C libft/ fclean
+	@$(MAKE) -s -C libft/ fclean
 	@rm -rf *.o
 
 fclean: clean

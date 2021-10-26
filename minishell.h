@@ -1,5 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
+#include <curses.h>
+#include <term.h>
+#include <termcap.h>
 # include <unistd.h>
 # include <signal.h>
 # include <termios.h>
@@ -29,6 +32,8 @@ typedef struct s_command
 {
 	char **args;
 	t_redirection *redirection;
+	t_redirection *red_in;
+	t_redirection *red_out;
 	int i;
 	struct s_command *next;
 }               t_command;
@@ -56,7 +61,6 @@ t_global g_shell;
 t_env   *get_env_by_name(char *name);
 int     env_name_len(char *env);
 void    fill_env(char **envp);
-void    print_env();
 int     expand_env(char **arg, int index);
 void	quote_args(t_command *cmd);
 int		get_args(char *cmd, t_command *new);
@@ -66,12 +70,16 @@ int		remove_char(char *str,int index, int flag);
 int		remove_str(char **str,int i,int count);
 int		get_redirection(char **str, t_redirection *r, int i);
 int		get_redirections(char **str, t_command *cmd, int i);
-int		new_env(char *name, char *value);
 char	*here_doc(char *str);
 void	set_global_signals();
 void	heredoc_sig_handler(int sig);
 void	global_sig_handler(int sig);
-
+void	ignctl();
+int		is_token(char c);
+int		check_file(char *f);
+int		remove_quotes(char **s);
+void	free_redirection(void);
+void	free_cmds(void);
 //-------------ENV MANIPULATION--------------//
 
 int		find_key(t_env *env, char *target);

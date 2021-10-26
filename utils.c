@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
+/*   Updated: 2021/10/21 11:33:42 by mourad           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int remove_char(char *str,int index, int flag)
+int	remove_char(char *str, int index, int flag)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if(!flag)
+	if (!flag)
 		flag = str[index];
 	else
 		flag = 0;
@@ -17,10 +29,10 @@ int remove_char(char *str,int index, int flag)
 	return (flag);
 }
 
-int	remove_str(char **str,int i,int count)
+int	remove_str(char **str, int i, int count)
 {
-	int len;
-	char *after;
+	int		len;
+	char	*after;
 	char	*new;
 
 	len = ft_strlen(*str) - count + 1;
@@ -31,5 +43,27 @@ int	remove_str(char **str,int i,int count)
 	ft_strlcpy(new + i, after, ft_strlen(after) + 1);
 	free(*str);
 	*str = new;
-	return 0;
+	return (0);
+}
+
+int	is_token(char c)
+{
+	if (c == ' ' || c == '|' || c == '<' || c == '>')
+		return (1);
+	else
+		return (0);
+}
+
+int	check_file(char *f)
+{
+	int	fd;
+
+	fd = open(f, O_RDONLY, 0644);
+	if (fd == -1)
+	{
+		printf("minishell: %s: No such file or directory\n", f);
+		return (0);
+	}
+	else
+		return (1);
 }
