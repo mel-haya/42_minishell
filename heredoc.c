@@ -6,7 +6,7 @@
 /*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 02:37:35 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/26 15:50:34 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/26 12:19:18 by mourad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ char	*here_doc(char *str)
 	if (g_shell.status)
 	{
 		unlink(file);
+		free(file);
 		return (NULL);
 	}
 	set_global_signals();

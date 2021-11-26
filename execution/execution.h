@@ -39,7 +39,7 @@ int     arr_lenght(char **arr);
 // //------- LIST DESTRUCTOR FUNCTIONS --------//
 
 // void	free_lst(t_env **lst);
-void	exit_err(char *msg, int status, int fd);
+void	exit_err(char *msg, char *output, int fd);
 
 // //------- BUILTINS FUNCTIONS --------//
 
@@ -54,4 +54,8 @@ void	exec_exit(char **cmd);
 //merged version
 void	execution();
 
+// REDIRECTIONS
+
+void    filter_redir();
+char	*path_case_error();
 #endif

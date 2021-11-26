@@ -6,7 +6,7 @@
 /*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/21 11:11:42 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/08 18:30:58 by mourad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ int	skip_arg(char *cmd, int i)
 		if (!flag && is_token(cmd[i]))
 			return (i);
 		if (!flag && (cmd[i] == 34 || cmd[i] == 39))
-		{
 			flag = cmd[i];
-			i++;
-		}
 		else if (flag == cmd[i + 1])
 			flag = 0;
 		i++;

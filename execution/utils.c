@@ -2,12 +2,16 @@
 
 int     is_builtin(char *cmd)
 {
-    if (!ft_strncmp(cmd, "echo", ft_strlen(cmd)) || !ft_strncmp(cmd, "cd", ft_strlen(cmd)) ||
-        !ft_strncmp(cmd, "pwd", ft_strlen(cmd)) || !ft_strncmp(cmd, "export", ft_strlen(cmd)) ||
-        !ft_strncmp(cmd, "unset", ft_strlen(cmd)) || !ft_strncmp(cmd, "env", ft_strlen(cmd)) ||
-        !ft_strncmp(cmd, "exit", ft_strlen(cmd)))
-        return (1);
-    return (0);
+	if (cmd)
+	{
+		if (!ft_strncmp(cmd, "echo", ft_strlen(cmd)) || !ft_strncmp(cmd, "cd", ft_strlen(cmd)) ||
+			!ft_strncmp(cmd, "pwd", ft_strlen(cmd)) || !ft_strncmp(cmd, "export", ft_strlen(cmd)) ||
+			!ft_strncmp(cmd, "unset", ft_strlen(cmd)) || !ft_strncmp(cmd, "env", ft_strlen(cmd)) ||
+			!ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+			return (1);
+		return(0);
+	}
+    return (2);
 }
 
 void	exec_builtin(char **cmd)

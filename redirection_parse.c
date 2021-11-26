@@ -6,7 +6,7 @@
 /*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:09:21 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/21 11:12:34 by mourad           ###   ########.fr       */
+/*   Updated: 2021/10/26 18:13:46 by mourad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	get_redirection(char **str, t_redirection *r, int i)
 		return (-1);
 	remove_quotes(&(r->file));
 	remove_str(str, i, len - i);
-	if (!check_file(r->file))
+	if (!check_file(r))
 		return (-1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/26 16:30:22 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/26 12:37:01 by mourad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	get_cmds(char **cmd)
 				return (-1);
 			}
 			tmp->next = malloc(sizeof(t_command));
+			tmp->next->is_piped = 1;
 			tmp = tmp->next;
 			i++;
 		}
@@ -106,6 +107,7 @@ int	check_line(char **line)
 		return (1);
 	}
 	g_shell.cmds = malloc(sizeof(t_command));
+	g_shell.cmds->is_piped = 0;
 	if (get_cmds(line) == -1)
 	{
 		free(*line);

@@ -34,6 +34,7 @@ typedef struct s_command
 	t_redirection *redirection;
 	t_redirection *red_in;
 	t_redirection *red_out;
+	int is_piped;
 	int i;
 	struct s_command *next;
 }               t_command;
@@ -76,7 +77,7 @@ void	heredoc_sig_handler(int sig);
 void	global_sig_handler(int sig);
 void	ignctl();
 int		is_token(char c);
-int		check_file(char *f);
+int		check_file(t_redirection *r);
 int		remove_quotes(char **s);
 void	free_redirection(void);
 void	free_cmds(void);
