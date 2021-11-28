@@ -83,21 +83,24 @@ void	change_key_value(t_env *env, char *key_target, char *new_value)
 	t_env	*tmp;
 
 	tmp = env;
-	while (tmp->next != NULL)
+	if (new_value)
 	{
-		if (ft_strncmp(tmp->name, key_target, ft_strlen(key_target)) == 0)
+		while (tmp->next != NULL)
+		{
+			if (ft_strncmp(tmp->name, key_target, ft_strlen(key_target)) == 0)
+			{
+				free(tmp->value);
+				tmp->value = ft_strdup(new_value);
+    	        free(new_value);
+			}
+			tmp = tmp->next;
+		}
+		if (tmp->name == key_target)
 		{
 			free(tmp->value);
 			tmp->value = ft_strdup(new_value);
-            free(new_value);
+    	    free(new_value);
 		}
-		tmp = tmp->next;
-	}
-	if (tmp->name == key_target)
-	{
-		free(tmp->value);
-		tmp->value = ft_strdup(new_value);
-        free(new_value);
 	}
 }
 

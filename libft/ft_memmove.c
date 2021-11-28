@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/10 16:11:32 by mel-haya          #+#    #+#             */
-/*   Updated: 2019/10/25 10:03:09 by mel-haya         ###   ########.fr       */
+/*   Created: 2019/10/12 19:51:16 by mhalli            #+#    #+#             */
+/*   Updated: 2019/12/06 08:00:31 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,22 @@
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*a;
-	char	*b;
-	int		i;
-	int		n;
+	char		*d;
+	const char	*s;
+	char		*dlen;
+	const char	*slen;
 
-	a = (char *)dst;
-	b = (char *)src;
-	i = 0;
-	n = len;
-	if (dst > src)
+	d = (char *)dst;
+	s = (const char *)src;
+	dlen = d + (len - 1);
+	slen = s + (len - 1);
+	if (s == NULL && d == NULL)
+		return (NULL);
+	if (d < s || (d == s && len == 1))
+		return (ft_memcpy(d, s, len));
+	while (len-- > 0)
 	{
-		i = n - 1;
-		while (i >= 0)
-		{
-			a[i] = b[i];
-			i--;
-		}
-	}
-	else
-	{
-		dst = ft_memcpy(a, b, len);
+		*dlen-- = *slen--;
 	}
 	return (dst);
 }

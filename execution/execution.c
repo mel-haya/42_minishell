@@ -83,7 +83,7 @@ char	*get_bin(char **bin_path, char *cmd)
 	if (cmd[0] == '/' || cmd[0] == '.' || !bin_path)
 	{
 		free_arr(bin_path);
-		return (cmd);
+		return (ft_strdup(cmd));
 	}
 	while (bin_path[++i])
 	{
@@ -94,7 +94,10 @@ char	*get_bin(char **bin_path, char *cmd)
 		free(cmd_path);
 	}
 	if (ret != 0)
+	{
+		free(cmd_path);
 		cmd_path = NULL;
+	}
 	free_arr(bin_path);
 	return (cmd_path);
 }
@@ -109,8 +112,8 @@ void	exec_cmd(char *path, char **cmd, char *err_output)
 	bin_path = ft_split(path, ':');
 	bin = get_bin(bin_path, cmd[0]);
 	pid = fork();
-	if (pid < 0)
-		exit(1);
+	// if (pid < 0)
+	// 	exit(1);
 	if (pid == 0)
 		exec(bin, cmd, err_output);
 	if (path)
@@ -131,6 +134,7 @@ void	command_exec(t_env *env, t_command *cmd)
 	else
 		exec_builtin(cmd->args);
 	free(err_msg);
+	free(path);
 }
 
 void	exec_redir(t_redirection *redir)
@@ -159,8 +163,6 @@ void	exec_redir(t_redirection *redir)
 			file = open(redir->file, O_RDONLY);
 			dup2(file, 0);
 			close(file);
-			// if (!ft_strncmp(redir->file, "/tmp/", 5))
-			// 	unlink(redir->file);
 		}
 		if (tmp->next == NULL)
 			break ;
@@ -202,14 +204,31 @@ void	cmd_redir(char *err_msg)
 	// ADD SHILD PROCESS TERMINATION STATUS CHECK
 }
 
+int	is_path_exist(t_env *env)
+{
+	t_env   *tmp;
+
+    if (g_shell.env)
+    {
+        tmp = g_shell.env;
+        while (tmp->next != NULL)
+        {
+            if (ft_strncmp(tmp->name, "PATH", 4) == 0)
+                return (1);
+            tmp = tmp->next;
+        }
+    }
+	return (0);
+}
+
 char	*path_case_error()
 {
-	char *path;
+	// char *path;
 
-	path = get_path(g_shell.env);
-	if (path)
+	// path = get_path(g_shell.env);
+	if (is_path_exist(g_shell.env))
 	{
-		free(path);
+		// free(path);
 		return (ft_strdup("command not found"));
 	}
 	else
@@ -233,9 +252,22 @@ void	redir_exec()
 
 void	execution()
 {
-	if (g_shell.cmds->redirection == NULL) // if there is no pipes and no redirections
-		command_exec(g_shell.env, g_shell.cmds);
-	if (g_shell.cmds->redirection) // if there is no pipes
-		redir_exec();
-}
+	// t_command	*tmp;
 
+	// tmp = g_shell.cmds;
+	// while (tmp)
+	// {
+	// 	printf("cmd = %s | is piped = %d\n", tmp->args[0], tmp->is_piped);
+	// 	if (tmp->next == NULL)
+	// 		break;
+	// 	tmp = tmp->next;
+	// }
+	
+	foo = fopen("/tmp/mouadzamel", "a");
+	if (!g_shell.cmds->next && !g_shell.cmds->redirection)
+		command_exec(g_shell.env, g_shell.cmds);
+	else if (!g_shell.cmds->next && g_shell.cmds->redirection)
+		redir_exec();
+	else if (g_shell.cmds->next)
+		pipes();
+}

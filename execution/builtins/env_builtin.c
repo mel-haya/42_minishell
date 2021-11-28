@@ -12,6 +12,6 @@ void	exec_env(char **cmd)
 			printf("%s=%s\n", tmp->name, tmp->value);
 			tmp = tmp->next;
 		}
-		printf("%s%s\n", tmp->name, tmp->value);
+		printf("%s=%s\n", tmp->name, tmp->value);
 	}
 }

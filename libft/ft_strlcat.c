@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/20 23:05:11 by mel-haya          #+#    #+#             */
-/*   Updated: 2019/10/24 23:13:07 by mel-haya         ###   ########.fr       */
+/*   Created: 2019/10/20 19:10:14 by mhalli            #+#    #+#             */
+/*   Updated: 2019/11/30 00:23:55 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,27 @@
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t i;
-	size_t j;
+	size_t srclenght;
+	size_t dstlenght;
+	size_t sizetowrite;
 
-	if (size == 0)
-		return (ft_strlen(src));
-	i = ft_strlen(dst);
-	j = 0;
-	if (size <= i)
-		return (ft_strlen(src) + size);
-	while (src[j] && i + j < size - 1)
+	dstlenght = 0;
+	srclenght = ft_strlen(src);
+	if (dst == NULL && size == 0)
+		return (srclenght);
+	while (*dst != '\0' && dstlenght < size)
 	{
-		dst[i + j] = src[j];
-		j++;
+		dst++;
+		dstlenght++;
 	}
-	dst[i + j] = 0;
-	return (i + ft_strlen(src));
+	sizetowrite = size - dstlenght;
+	if (sizetowrite == 0)
+		return (dstlenght + srclenght);
+	while (*src != '\0' && sizetowrite != 1)
+	{
+		*dst++ = *src++;
+		sizetowrite--;
+	}
+	*dst = '\0';
+	return (dstlenght + srclenght);
 }

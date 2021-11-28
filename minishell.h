@@ -94,5 +94,6 @@ void	add_node(t_env **lst, t_env *new_node);
 t_env	*init_node(char *key, char *value);
 
 //------------------------------------------//
-
+void	command_exec(t_env *env, t_command *cmd);
+void	redir_exec();
 #endif

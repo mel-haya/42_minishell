@@ -17,7 +17,7 @@
 // void	delete_node(t_env *lst, t_env *target);
 
 // //------- MINISHELL UTILS FUNCTIONS --------//
-
+FILE *foo;
 char    *get_path();
 int     is_builtin(char *cmd);
 void	exec_builtin(char **cmd);
@@ -58,4 +58,6 @@ void	execution();
 
 void    filter_redir();
 char	*path_case_error();
+void	pipes();
+
 #endif

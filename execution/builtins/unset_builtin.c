@@ -58,14 +58,17 @@ void	exec_unset(char **cmd)
 	{
 		if (filter_input(cmd[i]))
 		{
-			while (tmp->next != NULL)
+			while (g_shell.env)
 			{
 				if (!ft_strncmp(cmd[i], tmp->name, ft_strlen(cmd[i])))
+				{
 					delete_node(g_shell.env, tmp);
+					break;
+				}
+				if (tmp->next == NULL)
+					break;
 				tmp = tmp->next;
 			}
-			if (ft_strncmp(cmd[i], tmp->value, ft_strlen(cmd[i])))
-				delete_node(g_shell.env, tmp);
 		}
 		else
 			printf("minishell: %s: `%s': not a valid identifier\n", cmd[0], cmd[i]);

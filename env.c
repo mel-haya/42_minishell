@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:20:30 by mourad            #+#    #+#             */
-/*   Updated: 2021/11/26 12:18:35 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/28 16:25:11 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,23 @@ int	expand_status(char **arg, int index)
 	return (ret);
 }
 
+// char *get_value(char *str)
+// {
+// 	if(ft_isdigit(str[0]))
+// }
+
+char *get_after(char *str, char *after, int index)
+{
+	after = str + index + 1;
+
+	if (!ft_isalpha(*after) && *after != '_')
+		return after + 1;
+	while (*after && (*after != 34 && *after != 39 \
+	&& *after != ' ' && *after != '$'))
+		after++;
+	return after;
+}
+
 int	expand_env(char **arg, int index)
 {
 	char	*after;
@@ -100,14 +117,15 @@ int	expand_env(char **arg, int index)
 	if ((*arg)[index + 1] == '?')
 		return (expand_status(arg, index));
 	env = get_env_by_name((*arg) + index + 1);
-	after = (*arg) + index + 1;
+	//after = (*arg) + index + 1;
 	if (!env)
 		value = "";
 	else
 		value = env->value;
-	while (*after && (*after != 34 && *after != 39 \
-	&& *after != ' ' && *after != '$'))
-		after++;
+	// while (*after && (*after != 34 && *after != 39 \
+	// && *after != ' ' && *after != '$'))
+	// 	after++;
+	after = get_after(*arg, after, index);
 	len = index + ft_strlen(value) + ft_strlen(after) + 2;
 	new = malloc(len);
 	ft_strlcpy(new, *arg, index + 1);
