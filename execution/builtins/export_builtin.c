@@ -6,14 +6,20 @@ char	*get_export_key(char *str)
 	int		i;
 
 	i = 1;
-	// if (!ft_strchr(str, '='))
-	// 	return (NULL);
-	while (str[i] && str[i] != '=')
+	while (str[i])
+	{
+		if (str[i] == '=')
+			break ;
 		i++;
+	}
 	key = (char *)malloc(sizeof(char) * (i + 1));
 	i = -1;
-	while (str[++i] != '=')
-		key[i] = str[i];
+	while (str[++i])
+	{
+		if (str[i] == '=')
+			break ;
+		key[i] = str[i];		
+	}
 	key[i] = 0;
 	return (key);
 }
@@ -24,28 +30,13 @@ char	*get_export_value(char *str)
 	int		i;
 
 	i = 0;
-	// if (!ft_strchr(str, '='))
-	// 	return (NULL);
+	if (!ft_strchr(str, '='))
+		return (NULL);
 	while (str[i] && str[i] != '=')
 		i++;
 	value = ft_strdup(str + i + 1);
 	return (value);
 }
-
-// int		filter_key(char *str)
-// {
-// 	int		i;
-	
-// 	i = -1;
-// 	if (str && ft_isdigit(str[0]))
-// 		return (0);
-// 	while (str && str[++i])
-// 	{
-// 		if (!ft_isalnum(str[i]) && str[i] != '=')
-// 			return (0);
-// 	}
-// 	return (1);
-// }
 
 int		is_valid_data(char *data)
 {
@@ -54,8 +45,9 @@ int		is_valid_data(char *data)
 	i = 0;
 	if ((ft_isalpha(data[i]) || data[i] == '_'))
 	{
-		while(data[++i])
+		while(data[++i] && data[i] != '=')
 		{
+			// printf("%c", data[i]);
 			if (!ft_isalnum(data[i]) && data[i] != '=' && data[i] != '_')
 				return (0);
 		}
@@ -64,43 +56,51 @@ int		is_valid_data(char *data)
 	return(0);
 }
 
-void	exec_export(char **cmd)
+int	empty_export()
+{
+	t_env	*tmp;
+
+	tmp = g_shell.env;
+	while (tmp->next != NULL)
+	{
+		printf("declare -x %s", tmp->name);
+		if(tmp->value)
+			printf("=\"%s\"",tmp->value);
+		printf("\n");
+		tmp = tmp->next;
+	}
+	printf("declare -x %s", tmp->name);
+	if(tmp->value)
+		printf("=\"%s\"",tmp->value);
+	printf("\n");
+	return (0);
+}
+
+int exec_export(char **cmd)
 {
 	char	*key;
 	char	*value;
 	int		i;
 
 	i = 0;
-	while (cmd[++i])
+	if (arr_lenght(cmd) > 1)
 	{
-		if (is_valid_data(cmd[i]))
+		while (cmd[++i])
 		{
-			if (!ft_strchr(cmd[i], '='))
-				return ;
-			key = get_export_key(cmd[i]);
-			value = get_export_value(cmd[i]);
-			add_key_value(g_shell.env, key, value);
+			if (is_valid_data(cmd[i]))
+			{
+				key = get_export_key(cmd[i]);
+				value = get_export_value(cmd[i]);
+				add_key_value(g_shell.env, key, value);
+			}
+			else
+			{
+				printf("minishell: %s: `%s': not a valid identifier\n", cmd[0], cmd[i]);
+				return (1);
+			}
 		}
-		else
-			printf("minishell: %s: `%s': not a valid identifier\n", cmd[0], cmd[i]);
+		return (0);
 	}
-	// char	*key;
-	// char	*value;
-	// int		i;
+	return (empty_export());
 
-	// i = 0;
-	// while (cmd[++i])
-	// {
-	// 	key = get_export_key(cmd[i]);
-	// 	if (cmd[i][0] && filter_key(key))
-	// 	{
-	// 		value = get_export_value(cmd[i]);
-	// 		add_key_value(g_shell.env, key, value);
-	// 	}
-	// 	else
-	// 	{
-	// 		free(key);
-	// 		printf("minishell: %s: `%s': not a valid identifier\n", cmd[0], cmd[i]);
-	// 	}
-	// }
 }

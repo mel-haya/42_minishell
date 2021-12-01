@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/11/08 18:30:58 by mourad           ###   ########.fr       */
+/*   Updated: 2021/12/01 03:41:04 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	get_args(char *cmd, t_command *new)
 		skip = skip_arg(cmd, i);
 		new->args[j] = malloc(skip - i + 1);
 		ft_strlcpy(new->args[j], cmd + i, skip - i + 1);
+		new->args[j] = tokenize_line(new->args[j]);
 		i = skip;
 		while (cmd[i] == ' ')
 			i++;
@@ -89,16 +90,16 @@ int	remove_quotes(char **s)
 			flag = remove_char((*s), i, flag);
 		else if ((*s)[i] == flag)
 			flag = remove_char((*s), i, flag);
-		else if (flag != 39 && (*s)[i] == '$' && \
-		(*s)[i + 1] && (*s)[i + 1] != '$')
-			i = expand_env(s, i);
+		// else if (flag != 39 && (*s)[i] == '$' && \
+		// (*s)[i + 1] && (*s)[i + 1] != '$')
+		// 	i = expand_env(s, i);
 		else
 			i++;
 	}
 	return (flag);
 }
 
-void	quote_args(t_command *cmd)
+int	quote_args(t_command *cmd)
 {
 	int	i;
 	int	flag;
@@ -111,5 +112,9 @@ void	quote_args(t_command *cmd)
 		i++;
 	}
 	if (flag)
+	{
 		printf("Error: Multiline\n");
+		return (flag);
+	}
+	return (0);
 }

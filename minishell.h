@@ -63,7 +63,7 @@ t_env   *get_env_by_name(char *name);
 int     env_name_len(char *env);
 void    fill_env(char **envp);
 int     expand_env(char **arg, int index);
-void	quote_args(t_command *cmd);
+int		quote_args(t_command *cmd);
 int		get_args(char *cmd, t_command *new);
 int		get_args_num(char *cmd);
 int		skip_arg(char *cmd, int i);
@@ -81,6 +81,10 @@ int		check_file(t_redirection *r);
 int		remove_quotes(char **s);
 void	free_redirection(void);
 void	free_cmds(void);
+int		is_empty_line(char *str);
+char    *untokenize_env(char *name);
+char	*tokenize_line(char *line);
+void	expand_line(char **line);
 //-------------ENV MANIPULATION--------------//
 
 int		find_key(t_env *env, char *target);
@@ -94,6 +98,6 @@ void	add_node(t_env **lst, t_env *new_node);
 t_env	*init_node(char *key, char *value);
 
 //------------------------------------------//
-void	command_exec(t_env *env, t_command *cmd);
+int		command_exec(t_env *env, t_command *cmd);
 void	redir_exec();
 #endif

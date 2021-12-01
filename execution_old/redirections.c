@@ -1,6 +1,6 @@
 #include "execution.h"
 
-int append_redir(t_redirection *redir)
+void	append_redir(t_redirection *redir)
 {
 	int	out;
 
@@ -10,14 +10,11 @@ int append_redir(t_redirection *redir)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror(redir->file);
-		close(out);
-		return (0);
 	}
 	close(out);
-	return (1);
 }
 
-int out_redir(t_redirection *redir)
+void	out_redir(t_redirection *redir)
 {
 	int	out;
 
@@ -27,14 +24,11 @@ int out_redir(t_redirection *redir)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror(redir->file);
-		close (out);
-		return (0);
 	}
 	close (out);
-	return (1);
 }
 
-int in_redir(t_redirection *redir)
+void	in_redir(t_redirection *redir)
 {
 	int	in;
 
@@ -43,33 +37,27 @@ int in_redir(t_redirection *redir)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror(redir->file);
-		close (in);
-		return (0);
 	}
-	close (in);
-	return (1);
+	close(in);
 }
 
-int filter_redir(t_redirection *redirs)
+void	filter_redir(t_redirection *redirs)
 {
 	t_redirection *tmp;
-	int		err_status;
+	// int		err_status;
 
 	tmp = redirs;
 
 	while (tmp)
 	{
 		if (tmp->token == '>' && tmp->append)
-			err_status = append_redir(tmp);
+			append_redir(tmp);
 		else if (tmp->token == '<')
-			err_status = in_redir(tmp);
+			in_redir(tmp);
 		else if (tmp->token == '>')
-			err_status = out_redir(tmp);
-		if (err_status == 0)
-			return (0);
+			out_redir(tmp);
 		if (tmp->next == NULL)
 			break ;
 		tmp = tmp->next;
 	}
-	return (1);
 }

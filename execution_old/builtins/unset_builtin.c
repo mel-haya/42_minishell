@@ -47,7 +47,7 @@ void	delete_node(t_env *lst, t_env *target)
 	}
 }
 
-int	exec_unset(char **cmd)
+void	exec_unset(char **cmd)
 {
 	t_env	*tmp;
 	int		i;
@@ -71,10 +71,6 @@ int	exec_unset(char **cmd)
 			}
 		}
 		else
-		{
 			printf("minishell: %s: `%s': not a valid identifier\n", cmd[0], cmd[i]);
-			return (1);
-		}
 	}
-	return (0);
 }

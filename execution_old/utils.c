@@ -14,25 +14,22 @@ int     is_builtin(char *cmd)
     return (2);
 }
 
-int exec_builtin(char **cmd)
+void	exec_builtin(char **cmd)
 {
-	int		ret;
-
 	if (!ft_strncmp(cmd[0], "echo", ft_strlen(cmd[0])))
-		ret = exec_echo(cmd);
+		exec_echo(cmd);
 	else if (!ft_strncmp(cmd[0], "pwd", ft_strlen(cmd[0])))
-		ret = exec_pwd();
+		exec_pwd();
 	else if (!ft_strncmp(cmd[0], "cd", ft_strlen(cmd[0])))
-		ret = exec_cd(cmd);
+		exec_cd(cmd);
 	else if (!ft_strncmp(cmd[0], "export", ft_strlen(cmd[0])))
-		ret = exec_export(cmd);
+		exec_export(cmd);
 	else if (!ft_strncmp(cmd[0], "unset", ft_strlen(cmd[0])))
-		ret = exec_unset(cmd);
+		exec_unset(cmd);
 	else if (!ft_strncmp(cmd[0], "env", ft_strlen(cmd[0])))
-		ret = exec_env(cmd);
+		exec_env(cmd);
 	else if (!ft_strncmp(cmd[0], "exit", ft_strlen(cmd[0])))
 		exec_exit(cmd);
-	return (ret);
 }
 
 char    *get_path()
@@ -42,19 +39,17 @@ char    *get_path()
     if (g_shell.env)
     {
         tmp = g_shell.env;
-        while (tmp)
+        while (tmp->next != NULL)
         {
-            if (!strcmp(tmp->name, "PATH"))
+            if (ft_strncmp(tmp->name, "PATH", 4) == 0)
                 return (ft_strdup(tmp->value));
-			if (tmp->next == NULL)
-				break;
             tmp = tmp->next;
         }
     }
 	return (NULL);
 }
 
-int arr_lenght(char **arr)
+int     arr_lenght(char **arr)
 {
     int     i;
 
@@ -71,14 +66,14 @@ int	find_key(t_env *env, char *target)
     if (env)
     {
         tmp = env;
-        while (tmp)
+        while (tmp->next != NULL)
         {
-            if (!strcmp(tmp->name, target))
+            if (ft_strncmp(tmp->name, target, ft_strlen(target)) == 0)
                 return (1);
-			if (tmp->next == NULL)
-				break;
             tmp = tmp->next;
         }
+		if (ft_strncmp(tmp->name, target, ft_strlen(target)) == 0)
+            return (1);
     }
 	return (0);
 }
@@ -87,20 +82,24 @@ void	change_key_value(t_env *env, char *key_target, char *new_value)
 {
 	t_env	*tmp;
 
+	tmp = env;
 	if (new_value)
 	{
-		tmp = env;
-		while (tmp)
+		while (tmp->next != NULL)
 		{
-			if (!strcmp(tmp->name, key_target))
+			if (ft_strncmp(tmp->name, key_target, ft_strlen(key_target)) == 0)
 			{
 				free(tmp->value);
 				tmp->value = ft_strdup(new_value);
     	        free(new_value);
 			}
-			if (tmp->next == NULL)
-				break;
 			tmp = tmp->next;
+		}
+		if (tmp->name == key_target)
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup(new_value);
+    	    free(new_value);
 		}
 	}
 }
@@ -110,33 +109,27 @@ char	*get_key_value(t_env *env, char *key_target)
 	t_env *tmp;
 
 	tmp = env;
-	while (tmp)
+	while (tmp->next != NULL)
 	{
-		if (!strcmp(tmp->name, key_target))
+		if (ft_strncmp(tmp->name, key_target, ft_strlen(key_target)) == 0)
 			return (ft_strdup(tmp->value));
-		if (tmp->next == NULL)
-			break;
 		tmp = tmp->next;
 	}
+	if (ft_strncmp(tmp->name, key_target, ft_strlen(key_target)) == 0)
+		return (ft_strdup(tmp->value));
 	return (NULL);
 }
 
 void	add_key_value(t_env *env, char *key, char *value)
 {
-	if (!find_key(env, key))
-		add_node(&env, init_node(key, value));
-	else
-	{
-		change_key_value(env, key, value);
-		free(key);
-	}
-}
-
-int	get_exitvalue(int ret)
-{
-	if (WIFEXITED(ret))
-		return (WEXITSTATUS(ret));
-	else if (WIFSIGNALED(ret))
-		return (128 + WTERMSIG(ret));
-	return (ret);
+	// if (key && value)
+	// {
+		if (!find_key(env, key))
+			add_node(&env, init_node(key, value));
+		else
+		{
+			change_key_value(env, key, value);
+			free(key);
+		}
+	// }
 }

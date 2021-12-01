@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/26 18:19:00 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/30 17:21:28 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+int	is_empty_line(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] == ' ')
+		i++;
+	if (!str[i])
+		return (1);
+	else
+		return (0);
+}
 
 int	remove_char(char *str, int index, int flag)
 {

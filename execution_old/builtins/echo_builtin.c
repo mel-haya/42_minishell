@@ -32,7 +32,7 @@ int	toprint(char **cmd, int option)
 	return (i);
 }
 
-int	exec_echo(char **cmd)
+void	exec_echo(char **cmd)
 {
     int		option;
 	int		index;
@@ -53,5 +53,4 @@ int	exec_echo(char **cmd)
 	}
 	else
 		ft_putchar_fd('\n', 1);
-	return (0);
 }

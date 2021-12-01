@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:28:57 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/26 16:32:55 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/30 16:48:41 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,12 @@ void	global_sig_handler(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (sig == SIGINT && g_shell.is_forked)
-		printf("\n");
+	// else if (sig == SIGINT && g_shell.is_forked)
+	// {
+	// 	//printf("\n");
+	// 	return ;
+	// }
+	//printf("%d\n", g_shell.is_forked);
 }
 
 void	heredoc_sig_handler(int sig)

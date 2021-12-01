@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/11/26 12:37:01 by mourad           ###   ########.fr       */
+/*   Updated: 2021/12/01 18:22:20 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ int	get_cmds(char **cmd)
 		if (init_cmd(cmd, tmp, i) == -1)
 			return (-1);
 		i += get_args(*cmd + i, tmp);
-		quote_args(tmp);
+		if (quote_args(tmp))
+			return(-1);
 		if ((*cmd)[i] == '|')
 		{
-			if ((*cmd)[i] == 0)
+			while((*cmd)[i + 1] == ' ')
+				i++;
+			if (!(*cmd)[i + 1])
 			{
 				printf("Error: Multiline\n");
 				tmp->next = NULL;
@@ -101,7 +104,10 @@ int	check_line(char **line)
 		printf("exit\n");
 		exit(0);
 	}
-	if (!**line)
+	add_history(*line);
+	expand_line(line);
+	//printf("%s\n",*line);
+	if (is_empty_line(*line))
 	{
 		free(*line);
 		return (1);
@@ -130,7 +136,6 @@ int	main(int argc, char **argv, char **envp)
 		g_shell.heredocn = 0;
 		line = readline("\001\e[32m\033[1m\002minishell%\
 \001\e[0m\033[0m\002 ");
-		add_history(line);
 		if (check_line(&line))
 			continue ;
 		execution();

@@ -1,6 +1,6 @@
 #include "../execution.h"
 
-int	cd(t_env *env)
+void	cd(t_env *env)
 {
 	char	*oldpwd;
 	char	*home;
@@ -14,18 +14,16 @@ int	cd(t_env *env)
 		home = get_key_value(env, "HOME");
 		chdir(home);
 		change_key_value(env, "PWD", home);
-		return (0);
 	}
-	return (1);
 }
 
-int	exec_cd(char **cmd)
+void	exec_cd(char **cmd)
 {
 	char	*oldpwd;
 	char	*cwd;
 
 	if (arr_lenght(cmd) == 1)
-		return cd(g_shell.env);
+		cd(g_shell.env);
 	else
 	{
 		oldpwd = getcwd(NULL, 0);
@@ -34,10 +32,8 @@ int	exec_cd(char **cmd)
 			change_key_value(g_shell.env, "OLDPWD", oldpwd);
 			cwd = getcwd(NULL, 0);
 			change_key_value(g_shell.env, "PWD", cwd);
-			return (0);
 		}
 		else
 			printf("minishell: %s: %s: %s\n", cmd[0], cmd[1], strerror(errno));
 	}
-	return (1);
 }

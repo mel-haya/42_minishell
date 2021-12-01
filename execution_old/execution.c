@@ -13,9 +13,47 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
+// void	print_lst(t_env *lst)
+// {
+// 	t_env *tmp;
+
+// 	tmp = lst;
+// 	if (lst)
+// 	{
+// 		while (lst->next != NULL)
+// 		{
+// 			// if (ft_strncmp(lst->key, "OLDPWD", 6) == 0 || ft_strncmp(lst->key, "PWD", 3) == 0)
+// 				// printf("key:| %s | value:| %s |\n", lst->key, lst->value);
+// 				printf("%s%s\n", lst->key, lst->value);
+// 			lst = lst->next;
+// 		}
+// 		// if (ft_strncmp(lst->key, "OLDPWD", 6) == 0 || ft_strncmp(lst->key, "PWD", 3) == 0)
+// 			// printf("key:| %s | value:| %s |\n", lst->key, lst->value);
+// 				printf("%s%s\n", lst->key, lst->value);
+// 	}
+// }
+
+// void	init_env(t_env **env_lst, char **env)
+// {
+// 	int		i;
+// 	char	**splited_env;
+// 	char	*key;
+// 	char	*value;
+
+// 	i = 0;
+// 	while (env[i])
+// 	{
+// 		splited_env = ft_split(env[i++], '=');
+// 		key = ft_strdup(splited_env[0]);
+// 		value = ft_strjoin("=", splited_env[1]);
+// 		add_node(env_lst, init_node(key, value));
+// 		free_arr(splited_env);
+// 	}
+// }
+
 void	exec(char *bin, char **cmd, char *err_output)
 {
-	g_shell.is_forked = 1;
+	//g_shell.is_forked = 1;
 	if (execve(bin, cmd, NULL) == -1)
 	{
 		exit_err(cmd[0], err_output, 2);
@@ -81,35 +119,21 @@ void	exec_cmd(char *path, char **cmd, char *err_output)
 	g_shell.is_forked = 0;
 }
 
-int command_exec(t_env *env, t_command *cmd)
+void	command_exec(t_env *env, t_command *cmd)
 {
 	char	*path;
 	char	*err_msg;
-	int		ret;
 
+	// puts("aaa");
 	err_msg = path_case_error(env);
 	path = get_path();
 
 	if (!is_builtin(cmd->args[0]))
 		exec_cmd(path, cmd->args, err_msg);
 	else
-		g_shell.status = exec_builtin(cmd->args);
+		exec_builtin(cmd->args);
 	free(err_msg);
 	free(path);
-	return (ret);
-}
-
-int open_f(char *f, t_redirection *tmp)
-{
-	int file;
-
-	if (tmp->token == '>' && !tmp->append)
-		file = open(f, O_WRONLY | O_TRUNC);
-	else if (tmp->token == '>' && tmp->append)
-		file = open(f, O_WRONLY | O_APPEND, 0644);
-	else if (tmp->token == '<')
-		file = open(f, O_RDONLY);
-	return (file);
 }
 
 void	exec_redir(t_redirection *redir)
@@ -118,16 +142,27 @@ void	exec_redir(t_redirection *redir)
 	int		file;
 
 	tmp = redir;
+
 	while (tmp)
 	{
-		file = open_f(redir->file, tmp);
 		if (tmp->token == '>' && !tmp->append)
+		{
+			file = open(redir->file, O_WRONLY | O_TRUNC);
 			dup2(file, 1);
+			close(file);
+		}
 		else if (tmp->token == '>' && tmp->append)
+		{
+			file = open(redir->file, O_WRONLY | O_APPEND, 0644);
 			dup2(file, 1);
+			close (file);
+		}
 		else if (tmp->token == '<')
+		{
+			file = open(redir->file, O_RDONLY);
 			dup2(file, 0);
-		close(file);
+			close(file);
+		}
 		if (tmp->next == NULL)
 			break ;
 		tmp = tmp->next;
@@ -150,15 +185,13 @@ int	is_path_exist(t_env *env)
 {
 	t_env   *tmp;
 
-    if (env)
+    if (g_shell.env)
     {
-        tmp = env;
-        while (tmp)
+        tmp = g_shell.env;
+        while (tmp->next != NULL)
         {
-            if (!strcmp(tmp->name, "PATH"))
+            if (ft_strncmp(tmp->name, "PATH", 4) == 0)
                 return (1);
-			if (tmp->next == NULL)
-				break;
             tmp = tmp->next;
         }
     }
@@ -192,23 +225,21 @@ void	redir_exec(t_command *cmd)
 	char *err_msg;
 	int		fds[2];
 
-	if (filter_redir(cmd->redirection))
-	{
-		err_msg = path_case_error();
-		fds_saver(fds, 0);
-		if (is_builtin(cmd->args[0]))
-			builtin_redir();
-		else if (is_builtin(cmd->args[0]) == 0)
-			cmd_redir(err_msg);
-		else if (is_builtin(cmd->args[0]) == 2)
-			exec_redir(cmd->redirection);
-		fds_saver(fds, 1);
-		free(err_msg);
-	}
+	err_msg = path_case_error();
+	fds_saver(fds, 0);
+	filter_redir(cmd->redirection);
+	if (is_builtin(cmd->args[0]))
+		builtin_redir();
+	else if (is_builtin(cmd->args[0]) == 0)
+		cmd_redir(err_msg);
+	else if (is_builtin(cmd->args[0]) == 2)
+		exec_redir(cmd->redirection);
+	fds_saver(fds, 1);
+	free(err_msg);
 }
 
 void	execution()
-{
+{	
 	// foo = fopen("/tmp/loggs", "a");
 	if (!g_shell.cmds->next && !g_shell.cmds->redirection)
 		command_exec(g_shell.env, g_shell.cmds);
@@ -216,5 +247,4 @@ void	execution()
 		redir_exec(g_shell.cmds);
 	else if (g_shell.cmds->next)
 		pipes();
-	//printf("status = %d\n", g_shell.status);
 }

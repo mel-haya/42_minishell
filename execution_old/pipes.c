@@ -29,6 +29,7 @@ void	execute_pipcmd(t_command *cmd)
 
 void	duper(t_command *cmd, int fds[2], int input_fd)
 {
+	g_shell.is_forked++;
 	dup_fds(cmd, fds, input_fd);
 	close(fds[0]);
 	close(fds[1]);
@@ -60,6 +61,8 @@ void	pipes()
 	t_command *tmp;
 
 	tmp = g_shell.cmds;
+	puts("bbbb");
+
 	while (tmp)
 	{
 		pipe(fds);
@@ -73,5 +76,6 @@ void	pipes()
 	}
 	while (wait(&pid) != -1)
 		;
-	// g_shell.status = get_exitvalue(pid);
+	// if (WIFEXITED(pid))
+	// 	pid = (WEXITSTATUS(pid));
 }

@@ -50,11 +50,14 @@ SRC = execution/execution.c execution/utils.c execution/lst_constructor.c execut
 	libft/ft_toupper.c\
 	libft/ft_split.c\
 	\
-	minishell.c env.c args.c utils.c heredoc.c free_all.c redirection_parse.c signals.c\
+	minishell.c env.c args.c utils.c heredoc.c free_all.c redirection_parse.c signals.c line_preproc.c\
 
 all: $(NAME)
 
-$(NAME):
+tmp:
+	mkdir tmp
+
+$(NAME): tmp
 	@gcc $(SRC) -lreadline -o $(NAME) $(READLINE)
 
 clean:

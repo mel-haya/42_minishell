@@ -1,6 +1,6 @@
 #include "../execution.h"
 
-int	exec_env(char **cmd)
+void	exec_env(char **cmd)
 {
 	t_env	*tmp;
 
@@ -16,5 +16,4 @@ int	exec_env(char **cmd)
 		if(tmp->value)
 			printf("%s=%s\n", tmp->name, tmp->value);
 	}
-	return (0);
 }

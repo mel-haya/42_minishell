@@ -20,7 +20,7 @@
 FILE *foo;
 char    *get_path();
 int     is_builtin(char *cmd);
-int	exec_builtin(char **cmd);
+void	exec_builtin(char **cmd);
 int     arr_lenght(char **arr);
 // void	free_arr(char **arr);
 
@@ -43,12 +43,12 @@ void	exit_err(char *msg, char *output, int fd);
 
 // //------- BUILTINS FUNCTIONS --------//
 
-int	exec_echo(char **cmd);
-int	exec_pwd();
-int	exec_cd(char **cmd);
-int	exec_export(char **cmd);
-int	exec_unset(char **cmd);
-int	exec_env(char **cmd);
+void	exec_echo(char **cmd);
+void	exec_pwd();
+void	exec_cd(char **cmd);
+void	exec_export(char **cmd);
+void	exec_unset(char **cmd);
+void	exec_env(char **cmd);
 void	exec_exit(char **cmd);
 
 //merged version
@@ -56,7 +56,7 @@ void	execution();
 
 // REDIRECTIONS
 
-int    filter_redir();
+void    filter_redir();
 char	*path_case_error();
 void	pipes();
 

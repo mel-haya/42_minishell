@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 02:37:35 by mourad            #+#    #+#             */
-/*   Updated: 2021/11/26 12:19:18 by mourad           ###   ########.fr       */
+/*   Updated: 2021/11/30 21:12:12 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,22 @@ int	get_delimeter(char *str)
 void	expand_line(char **line)
 {
 	int	i;
+	int flag;
 
 	i = 0;
+	flag = 0;
 	while ((*line)[i])
 	{
-		if ((*line)[i] == '$')
-			expand_env(line, i);
+		if ((*line)[i] == '$' && !flag)
+			i = expand_env(line, i);
 		else
+		{
+			if ((*line)[i] == '\'' && flag)
+				flag = 0;
+			if ((*line)[i] == '\'' && !flag)
+				flag = 1;
 			i++;
+		}
 	}
 }
 
@@ -61,14 +69,14 @@ int	input_to_file(char *file, char *delimeter, int mode)
 	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	while (1)
 	{
-		line = readline("heredoc>");
-		if (!line)
-			printf("\n");
+		line = readline(">");
 		if (!line || !ft_strncmp(line, delimeter, ft_strlen(line)))
 			break ;
+		if (!*line)
+			continue ;
 		if (!mode)
 			expand_line(&line);
-		write(fd, line, ft_strlen(line));
+		write(fd, tokenize_line(line), ft_strlen(line));
 		free(line);
 		write(fd, "\n", 1);
 	}
@@ -86,6 +94,14 @@ char	*here_doc_name(void)
 	g_shell.heredocn++;
 	free(tmp);
 	return (ret);
+}
+
+char	*failed_herdoc(char *file)
+{
+	g_shell.status = 1;
+	unlink(file);
+	free(file);
+	return (NULL);
 }
 
 char	*here_doc(char *str)
@@ -109,11 +125,7 @@ char	*here_doc(char *str)
 		wait(&g_shell.status);
 	free(str);
 	if (g_shell.status)
-	{
-		unlink(file);
-		free(file);
-		return (NULL);
-	}
+		return (failed_herdoc(file));
 	set_global_signals();
 	return (file);
 }
