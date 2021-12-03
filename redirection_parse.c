@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:09:21 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 10:01:03 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 10:19:45 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int check_red_token(char **str, int i)
 	if (is_token(red[i]))
 	{
 		printf("minishell : syntax error near unexpected token '%c'\n", c);
+		g_shell.status = 1;
 		return (0);
 	}
 	else

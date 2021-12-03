@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 09:17:49 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 10:18:34 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	get_cmds(char **cmd)
 			if (!(*cmd)[i + 1])
 			{
 				printf("minishell : syntax error near unexpected token near '|'\n");
+				g_shell.status = 1;
 				tmp->next = NULL;
 				return (-1);
 			}

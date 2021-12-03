@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:28:57 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 03:34:43 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 10:20:22 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,7 @@ void	global_sig_handler(int sig)
 		rl_redisplay();
 	}
 	else if (sig == SIGQUIT && g_shell.is_forked)
-	{
 		printf("QUIT\n");
-		//exit (0);
-	}
-	//printf("%d\n", g_shell.is_forked);
 }
 
 void	heredoc_sig_handler(int sig)
