@@ -6,13 +6,13 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:47:33 by mel-haya          #+#    #+#             */
-/*   Updated: 2021/12/01 03:36:33 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 10:30:47 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char    *untokenize_env(char *name)
+char	*untokenize_env(char *name)
 {
 	char	*ret;
 	char	*value;
@@ -30,13 +30,13 @@ char    *untokenize_env(char *name)
 	while (ret[i])
 	{
 		if (ret[i] == '$' || ret[i] == '|' || ret[i] == '<' || ret[i] == '>')
-			ret[i] = - ret[i];
+			ret[i] = -ret[i];
 		i++;
 	}
 	return (ret);
 }
 
-char *tokenize_line(char *line)
+char	*tokenize_line(char *line)
 {
 	int		i;
 
@@ -44,8 +44,8 @@ char *tokenize_line(char *line)
 	while (line[i])
 	{
 		if (line[i] < 0)
-			line[i] = - line[i];
+			line[i] = -line[i];
 		i++;
 	}
-	return line;
+	return (line);
 }

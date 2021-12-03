@@ -16,8 +16,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/errno.h>
-
 #include "execution/execution.h"
+
+# define MULTILINE "minishell : syntax error near unexpected token near '|'\n"
 
 typedef struct	s_redirection
 {
@@ -86,12 +87,17 @@ int		is_empty_line(char *str);
 char    *untokenize_env(char *name);
 char	*tokenize_line(char *line);
 void	expand_line(char **line);
+int		get_delimeter(char *str);
+int		init_global(void);
+void	aloc_red(t_command *cmd, t_redirection	**tmp);
+
 //-------------ENV MANIPULATION--------------//
 
 int		find_key(t_env *env, char *target);
 void	change_key_value(t_env *env, char *key_target, char *new_value);
 char	*get_key_value(t_env *env, char *key_target);
 void	add_key_value(t_env *env, char *key, char *value);
+int		expand_status(char **arg, int index);
 
 //--------------NODE UTILS-----------------//
 

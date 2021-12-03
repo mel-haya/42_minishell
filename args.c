@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 02:12:47 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 10:25:24 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,6 @@ int	remove_quotes(char **s)
 			flag = remove_char((*s), i, flag);
 		else if ((*s)[i] == flag)
 			flag = remove_char((*s), i, flag);
-		// else if (flag != 39 && (*s)[i] == '$' && \
-		// (*s)[i + 1] && (*s)[i + 1] != '$')
-		// 	i = expand_env(s, i);
 		else
 			i++;
 	}

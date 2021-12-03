@@ -6,25 +6,11 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:09:21 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 10:19:45 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 11:08:29 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	aloc_red(t_command *cmd, t_redirection	**tmp)
-{
-	if (!cmd->redirection)
-	{
-		cmd->redirection = malloc(sizeof(t_redirection));
-		*tmp = cmd->redirection;
-	}
-	else
-	{
-		(*tmp)->next = malloc(sizeof(t_redirection));
-		*tmp = (*tmp)->next;
-	}
-}
 
 void	get_last_red(t_command *cmd, t_redirection	*red)
 {
@@ -34,17 +20,17 @@ void	get_last_red(t_command *cmd, t_redirection	*red)
 		cmd->red_in = red;
 }
 
-int check_red_token(char **str, int i)
+int	check_red_token(char **str, int i)
 {
-	char *red;
-	char c;
+	char	*red;
+	char	c;
 
 	c = (*str)[i];
 	red = *str;
-	if(red[i] == red[i + 1])
+	if (red[i] == red[i + 1])
 		i++;
 	i++;
-	while(red[i] == ' ')
+	while (red[i] == ' ')
 		i++;
 	if (is_token(red[i]))
 	{
@@ -66,7 +52,7 @@ int	get_redirections(char **str, t_command *cmd, int i)
 			i++;
 		if ((*str)[i] == '<' || (*str)[i] == '>')
 		{
-			if(!check_red_token(str, i))
+			if (!check_red_token(str, i))
 				return (-1);
 			aloc_red(cmd, &tmp);
 			if ((get_redirection(str, tmp, i)) == -1)
@@ -98,7 +84,8 @@ int	init_red(char **str, t_redirection *r, int i)
 		j++;
 	if (is_token((*str)[j]))
 	{
-		printf("minishell :syntax error near unexpected token '%c'\n", (*str)[j]);
+		printf("minishell :syntax error near unexpected token\
+'%c'\n", (*str)[j]);
 		return (-1);
 	}
 	return (j);

@@ -6,59 +6,11 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 02:37:35 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 06:39:08 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 10:29:31 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	get_delimeter(char *str)
-{
-	int	flag;
-	int	i;
-	int	mode;
-
-	i = 0;
-	mode = 0;
-	flag = 0;
-	while (str[i])
-	{
-		if (!flag && (str[i] == 39 || str[i] == 34))
-		{
-			flag = remove_char(str, i, flag);
-			mode = 1;
-		}
-		else if (flag && str[i] == flag)
-			flag = remove_char(str, i, flag);
-		else
-			i++;
-	}
-	if (flag)
-		return (-1);
-	return (mode);
-}
-
-void	expand_line(char **line)
-{
-	int	i;
-	int flag;
-
-	i = 0;
-	flag = 0;
-	while ((*line)[i])
-	{
-		if ((*line)[i] == '$' && !flag)
-			i = expand_env(line, i);
-		else
-		{
-			if ((*line)[i] == '\'' && flag)
-				flag = 0;
-			if ((*line)[i] == '\'' && !flag)
-				flag = 1;
-			i++;
-		}
-	}
-}
 
 int	input_to_file(char *file, char *delimeter, int mode)
 {

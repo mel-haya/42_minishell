@@ -6,16 +6,15 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 09:50:47 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 11:05:28 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 int	is_empty_line(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] == ' ')
@@ -70,8 +69,8 @@ int	is_token(char c)
 
 int	check_file(t_redirection *r)
 {
-	int	fd;
-	char *err;
+	int		fd;
+	char	*err;
 
 	fd = open(r->file, O_RDONLY);
 	err = strerror(errno);
@@ -80,11 +79,11 @@ int	check_file(t_redirection *r)
 	{
 		fd = open(r->file, O_RDONLY | O_CREAT, 0644);
 		close(fd);
-		return(1);
+		return (1);
 	}
 	else if (fd == -1)
 	{
-		printf("Minishell: %s: %s\n",r->file, err);
+		printf("Minishell: %s: %s\n", r->file, err);
 		g_shell.status = 1;
 		return (0);
 	}

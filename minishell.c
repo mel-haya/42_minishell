@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 10:18:34 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 11:07:37 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,20 @@ int	init_cmd(char **cmd, t_command *tmp, int i)
 	return (get_redirections(cmd, tmp, i));
 }
 
+int	check_next_cmd(char *str, int i)
+{
+	i++;
+	while (str[i] == ' ')
+		i++;
+	if (!str[i])
+	{
+		printf("minishell : syntax error near unexpected token '|'\n");
+		g_shell.status = 1;
+		return (-1);
+	}
+	return (i);
+}
+
 int	get_cmds(char **cmd)
 {
 	int			i;
@@ -35,22 +49,15 @@ int	get_cmds(char **cmd)
 			return (-1);
 		i += get_args(*cmd + i, tmp);
 		if (quote_args(tmp))
-			return(-1);
+			return (-1);
 		if ((*cmd)[i] == '|')
 		{
-			while((*cmd)[i + 1] == ' ')
-				i++;
-			if (!(*cmd)[i + 1])
-			{
-				printf("minishell : syntax error near unexpected token near '|'\n");
-				g_shell.status = 1;
-				tmp->next = NULL;
-				return (-1);
-			}
+			i = check_next_cmd(*cmd, i);
+			if (i == -1)
+				return (i);
 			tmp->next = malloc(sizeof(t_command));
 			tmp->next->is_piped = 1;
 			tmp = tmp->next;
-			i++;
 		}
 	}
 	return (0);
@@ -87,17 +94,6 @@ int	get_cmds(char **cmd)
 // 	printf("\n");
 // }
 
-int	init_global(void)
-{
-	g_shell.env = malloc(sizeof(t_env));
-	g_shell.is_forked = 0;
-	if (!g_shell.env || !g_shell.cmds)
-		return (1);
-	g_shell.status = 0;
-	ignctl();
-	return (0);
-}
-
 int	check_line(char **line)
 {
 	if (!*line)
@@ -108,7 +104,6 @@ int	check_line(char **line)
 	if (!is_empty_line(*line))
 		add_history(*line);
 	expand_line(line);
-	//printf("%s\n",*line);
 	if (is_empty_line(*line))
 	{
 		free(*line);
