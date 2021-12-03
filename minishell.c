@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 11:07:37 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 22:30:49 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,11 @@ int	main(int argc, char **argv, char **envp)
 	{
 		set_global_signals();
 		g_shell.heredocn = 0;
-		line = readline("\001\e[32m\033[1m\002minishell%\
+		if (g_shell.status)
+			line = readline("\001\e[32m\033[31m\002minishell%\
+\001\e[0m\033[0m\002 ");
+		else
+			line = readline("\001\e[32m\033[1m\002minishell%\
 \001\e[0m\033[0m\002 ");
 		if (check_line(&line))
 			continue ;
