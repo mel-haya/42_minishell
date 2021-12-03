@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
-/*   Updated: 2021/11/30 17:21:28 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 09:50:47 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	remove_str(char **str, int i, int count)
 
 int	is_token(char c)
 {
-	if (c == ' ' || c == '|' || c == '<' || c == '>')
+	if (c == ' ' || c == '|' || c == '<' || c == '>' || c == '\0')
 		return (1);
 	else
 		return (0);
@@ -71,8 +71,10 @@ int	is_token(char c)
 int	check_file(t_redirection *r)
 {
 	int	fd;
+	char *err;
 
-	fd = open(r->file, O_RDONLY, 0644);
+	fd = open(r->file, O_RDONLY);
+	err = strerror(errno);
 	close(fd);
 	if (fd == -1 && r->token == '>')
 	{
@@ -82,7 +84,8 @@ int	check_file(t_redirection *r)
 	}
 	else if (fd == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", r->file);
+		printf("Minishell: %s: %s\n",r->file, err);
+		g_shell.status = 1;
 		return (0);
 	}
 	else

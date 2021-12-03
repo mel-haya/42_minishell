@@ -66,4 +66,4 @@ clean:
 fclean: clean
 	@rm -rf $(NAME) $(NAME).dSYM #TODO: remove
 
-re: fclean all	
+re: fclean all

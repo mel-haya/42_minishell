@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/01 03:41:04 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 02:12:47 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ int	quote_args(t_command *cmd)
 	}
 	if (flag)
 	{
-		printf("Error: Multiline\n");
+		printf("minishell: Unclosed quotes\n");
+		g_shell.status = 1;
 		return (flag);
 	}
 	return (0);

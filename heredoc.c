@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 02:37:35 by mourad            #+#    #+#             */
-/*   Updated: 2021/11/30 21:12:12 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 06:39:08 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ char	*here_doc(char *str)
 	file = here_doc_name();
 	if (mode == -1)
 	{
-		printf("Error : Multiline\n");
+		printf("minishell : Unclose quotes\n");
+		g_shell.status = 1;
 		return (NULL);
 	}
 	signal(SIGINT, heredoc_sig_handler);

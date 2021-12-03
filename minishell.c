@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/01 18:22:20 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/03 09:17:49 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	get_cmds(char **cmd)
 				i++;
 			if (!(*cmd)[i + 1])
 			{
-				printf("Error: Multiline\n");
+				printf("minishell : syntax error near unexpected token near '|'\n");
 				tmp->next = NULL;
 				return (-1);
 			}
@@ -104,7 +104,8 @@ int	check_line(char **line)
 		printf("exit\n");
 		exit(0);
 	}
-	add_history(*line);
+	if (!is_empty_line(*line))
+		add_history(*line);
 	expand_line(line);
 	//printf("%s\n",*line);
 	if (is_empty_line(*line))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_parse.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:09:21 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/26 18:13:46 by mourad           ###   ########.fr       */
+/*   Updated: 2021/12/03 10:01:03 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,27 @@ void	get_last_red(t_command *cmd, t_redirection	*red)
 		cmd->red_in = red;
 }
 
+int check_red_token(char **str, int i)
+{
+	char *red;
+	char c;
+
+	c = (*str)[i];
+	red = *str;
+	if(red[i] == red[i + 1])
+		i++;
+	i++;
+	while(red[i] == ' ')
+		i++;
+	if (is_token(red[i]))
+	{
+		printf("minishell : syntax error near unexpected token '%c'\n", c);
+		return (0);
+	}
+	else
+		return (1);
+}
+
 int	get_redirections(char **str, t_command *cmd, int i)
 {
 	t_redirection	*tmp;
@@ -44,6 +65,8 @@ int	get_redirections(char **str, t_command *cmd, int i)
 			i++;
 		if ((*str)[i] == '<' || (*str)[i] == '>')
 		{
+			if(!check_red_token(str, i))
+				return (-1);
 			aloc_red(cmd, &tmp);
 			if ((get_redirection(str, tmp, i)) == -1)
 			{
@@ -74,7 +97,7 @@ int	init_red(char **str, t_redirection *r, int i)
 		j++;
 	if (is_token((*str)[j]))
 	{
-		printf("syntax error near unexpected token '%c'\n", (*str)[j]);
+		printf("minishell :syntax error near unexpected token '%c'\n", (*str)[j]);
 		return (-1);
 	}
 	return (j);

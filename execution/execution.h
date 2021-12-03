@@ -59,5 +59,6 @@ void	execution();
 int    filter_redir();
 char	*path_case_error();
 void	pipes();
+int	get_exitvalue(int ret);
 
 #endif

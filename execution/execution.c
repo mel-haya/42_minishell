@@ -15,7 +15,7 @@ void	free_arr(char **arr)
 
 void	exec(char *bin, char **cmd, char *err_output)
 {
-	g_shell.is_forked = 1;
+	g_shell.is_forked = 2;
 	if (execve(bin, cmd, NULL) == -1)
 	{
 		exit_err(cmd[0], err_output, 2);
@@ -72,13 +72,16 @@ void	exec_cmd(char *path, char **cmd, char *err_output)
 	bin_path = ft_split(path, ':');
 	bin = get_bin(bin_path, cmd[0]);
 	g_shell.is_forked = 1;
+	signal(SIGQUIT, global_sig_handler);
 	pid = fork();
 	if (pid == 0)
 		exec(bin, cmd, err_output);
 	if (path)
 		free(bin);
-	waitpid(pid, 0, 0);
+	wait(&pid);
 	g_shell.is_forked = 0;
+	signal(SIGQUIT, SIG_IGN);
+	g_shell.status = get_exitvalue(pid);
 }
 
 int command_exec(t_env *env, t_command *cmd)
@@ -118,11 +121,15 @@ void	exec_redir(t_redirection *redir)
 	int		file;
 
 	tmp = redir;
+
+		// printf("code was here \n");
 	while (tmp)
 	{
 		file = open_f(redir->file, tmp);
 		if (tmp->token == '>' && !tmp->append)
+		{
 			dup2(file, 1);
+		}
 		else if (tmp->token == '>' && tmp->append)
 			dup2(file, 1);
 		else if (tmp->token == '<')
@@ -134,16 +141,16 @@ void	exec_redir(t_redirection *redir)
 	}
 }
 
-void	builtin_redir()
+void	builtin_redir(t_command *cmd)
 {
-	exec_redir(g_shell.cmds->redirection);
-	exec_builtin(g_shell.cmds->args);
+	exec_redir(cmd->redirection);
+	exec_builtin(cmd->args);
 }
 
-void	cmd_redir(char *err_msg)
+void	cmd_redir(char *err_msg, t_command *cmd)
 {
-	exec_redir(g_shell.cmds->redirection);
-	exec_cmd(get_path(), g_shell.cmds->args, err_msg);
+	exec_redir(cmd->redirection);
+	exec_cmd(get_path(), cmd->args, err_msg);
 }
 
 int	is_path_exist(t_env *env)
@@ -197,9 +204,9 @@ void	redir_exec(t_command *cmd)
 		err_msg = path_case_error();
 		fds_saver(fds, 0);
 		if (is_builtin(cmd->args[0]))
-			builtin_redir();
+			builtin_redir(cmd);
 		else if (is_builtin(cmd->args[0]) == 0)
-			cmd_redir(err_msg);
+			cmd_redir(err_msg, cmd);
 		else if (is_builtin(cmd->args[0]) == 2)
 			exec_redir(cmd->redirection);
 		fds_saver(fds, 1);
@@ -216,5 +223,5 @@ void	execution()
 		redir_exec(g_shell.cmds);
 	else if (g_shell.cmds->next)
 		pipes();
-	//printf("status = %d\n", g_shell.status);
+	// printf("status = %d\n", g_shell.status);
 }
