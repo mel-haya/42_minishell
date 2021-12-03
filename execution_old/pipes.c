@@ -5,10 +5,7 @@ void	dup_fds(t_command *cmd, int fds[2], int input_fd)
 	// the first command won't be piped && the next one will be
 	// we should output on the fd[1] , input fd stay the same
 	if (cmd->is_piped == 0 && cmd->next && cmd->next->is_piped == 1)
-	{
-		dup2(g_shell._savein, STDIN_FILENO);
 		dup2(fds[1], 1);
-	}
 	// cmd is piped and the next one too this means that we are one the middles command
 	// so we should read from the input fd && output on fd[1]
 	else if (cmd->is_piped == 1 && cmd->next && cmd->next->is_piped == 1)
@@ -46,12 +43,12 @@ int		save_input_fd(t_command *cmd, int fds[2], int input_fd)
 	// close all the fds we are done using
 	close(fds[1]);
 	// close saved input fd only in the middle pipes
-//	if (input_fd)
-	close(input_fd);
+	if (input_fd)
+		close(input_fd);
 	// close the read input only in the last pipe
-	input_fd = fds[0];
 	if (cmd->next == NULL)
 		close(fds[0]);
+	input_fd = fds[0];
 	return (input_fd);
 }
 
@@ -62,9 +59,8 @@ void	pipes()
 	int		intput_fd;
 	t_command *tmp;
 
-	intput_fd = -1;
 	tmp = g_shell.cmds;
-	g_shell.is_forked = 1;
+	g_shell.is_piped = 1;
 	while (tmp)
 	{
 		pipe(fds);
@@ -72,14 +68,12 @@ void	pipes()
 		if (pid == 0)
 			duper(tmp, fds, intput_fd);
 		intput_fd = save_input_fd(tmp, fds, intput_fd);
-		dup2(g_shell._savein, STDIN_FILENO);
-		dup2(g_shell._saveout, STDOUT_FILENO);
-		if (tmp->next == NULL)
+		if (tmp->next == NULL || tmp->next->is_piped == 0)
 			break;
 		tmp = tmp->next;
 	}
 	while (wait(&pid) != -1)
 		;
-	g_shell.is_forked = 0;
+	g_shell.is_piped = 0;
 	// g_shell.status = get_exitvalue(pid);
 }

@@ -15,7 +15,7 @@ void	free_arr(char **arr)
 
 void	exec(char *bin, char **cmd, char *err_output)
 {
-	g_shell.is_forked = 1;
+	g_shell.is_forked = 2;
 	if (execve(bin, cmd, NULL) == -1)
 	{
 		exit_err(cmd[0], err_output, 2);
@@ -92,6 +92,7 @@ int command_exec(t_env *env, t_command *cmd)
 
 	err_msg = path_case_error(env);
 	path = get_path();
+
 	if (!is_builtin(cmd->args[0]))
 		exec_cmd(path, cmd->args, err_msg);
 	else
@@ -121,6 +122,7 @@ void	exec_redir(t_redirection *redir)
 
 	tmp = redir;
 
+		// printf("code was here \n");
 	while (tmp)
 	{
 		file = open_f(redir->file, tmp);
@@ -214,11 +216,12 @@ void	redir_exec(t_command *cmd)
 
 void	execution()
 {
-	foo = fopen("/tmp/loggs", "a");
+	// foo = fopen("/tmp/loggs", "a");
 	if (!g_shell.cmds->next && !g_shell.cmds->redirection)
 		command_exec(g_shell.env, g_shell.cmds);
 	else if (!g_shell.cmds->next && g_shell.cmds->redirection)
 		redir_exec(g_shell.cmds);
 	else if (g_shell.cmds->next)
 		pipes();
+	// printf("status = %d\n", g_shell.status);
 }

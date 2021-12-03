@@ -57,6 +57,9 @@ typedef struct  s_global
 	t_env       *env;
 	int         status;
 	int			heredocn;
+	int			is_piped;
+	int			_savein;
+	int			_saveout;
 }               t_global;
 
 t_global g_shell;
@@ -90,6 +93,7 @@ void	expand_line(char **line);
 int		get_delimeter(char *str);
 int		init_global(void);
 void	aloc_red(t_command *cmd, t_redirection	**tmp);
+int		get_exitvalue(int ret);
 
 //-------------ENV MANIPULATION--------------//
 
