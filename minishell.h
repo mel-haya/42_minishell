@@ -52,7 +52,7 @@ typedef struct s_env
 
 typedef struct  s_global
 {
-	int is_forked;
+	int			is_forked;
 	t_command   *cmds;
 	t_env       *env;
 	int         status;

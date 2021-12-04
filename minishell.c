@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 22:30:49 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/04 03:13:28 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	check_line(char **line)
 		printf("exit\n");
 		exit(0);
 	}
-	if (!is_empty_line(*line))
+	if (*line[0])
 		add_history(*line);
 	expand_line(line);
 	if (is_empty_line(*line))
