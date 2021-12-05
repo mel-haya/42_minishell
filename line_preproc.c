@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:47:33 by mel-haya          #+#    #+#             */
-/*   Updated: 2021/12/03 10:30:47 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/05 21:08:04 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ char	*untokenize_env(char *name)
 	ret = ft_strdup(value);
 	while (ret[i])
 	{
-		if (ret[i] == '$' || ret[i] == '|' || ret[i] == '<' || ret[i] == '>')
+		if (ret[i] == '$' || ret[i] == '|' || ret[i] == '<' || ret[i] == '>'\
+		|| ret[i] == 34 || ret[i] == 39)
 			ret[i] = -ret[i];
 		i++;
 	}

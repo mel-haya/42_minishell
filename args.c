@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/05 20:40:15 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/05 21:07:48 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	get_args(char *cmd, t_command *new)
 		skip = skip_arg(cmd, i);
 		new->args[j] = malloc(skip - i + 1);
 		ft_strlcpy(new->args[j], cmd + i, skip - i + 1);
-		new->args[j] = tokenize_line(new->args[j]);
 		i = skip;
 		while (cmd[i] == ' ')
 			i++;
@@ -106,6 +105,7 @@ int	quote_args(t_command *cmd)
 	while (cmd->args[i])
 	{
 		flag = remove_quotes(&(cmd->args[i]));
+		cmd->args[i] = tokenize_line(cmd->args[i]);
 		i++;
 	}
 	if (flag)
