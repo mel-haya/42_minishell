@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/04 03:13:28 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/05 04:30:39 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		set_global_signals();
+		g_shell.is_forked = 0;
 		g_shell.heredocn = 0;
 		if (g_shell.status)
 			line = readline("\001\e[32m\033[31m\002minishell%\

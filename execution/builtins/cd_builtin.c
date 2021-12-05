@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_builtin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 14:17:52 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/04 14:17:54 by mhalli           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../execution.h"
 
 int	cd(t_env *env)
@@ -25,7 +37,7 @@ int	exec_cd(char **cmd)
 	char	*cwd;
 
 	if (arr_lenght(cmd) == 1)
-		return cd(g_shell.env);
+		return (cd(g_shell.env));
 	else
 	{
 		oldpwd = getcwd(NULL, 0);

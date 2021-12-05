@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:20:30 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 10:26:28 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/05 03:09:04 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,34 @@ void	fill_env(char **envp)
 	}
 }
 
+int	check_piped(char *str, int j)
+{
+	int		i;
+	char	flag;
+
+	i = 0;
+	flag = 0;
+	while (i < j)
+	{
+		if (!flag && (str[i] == 39 || str[i] == 34))
+			flag = str[i];
+		else if ((flag == str[i]) && (str[i] == 39 || str[i] == 34))
+			flag = 0;
+		if (!flag && str[i] == '|')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	expand_status(char **arg, int index)
 {
 	char	*value;
 	char	*new;
 	int		ret;
 
+	if (check_piped(*arg, index))
+		g_shell.status = 0;
 	value = ft_itoa(g_shell.status);
 	ret = index + ft_strlen(value);
 	new = malloc(ft_strlen(*arg) + ft_strlen(value) - 1);

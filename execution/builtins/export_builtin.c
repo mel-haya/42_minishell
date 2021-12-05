@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_builtin.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 14:26:34 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/04 14:26:35 by mhalli           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../execution.h"
 
 char	*get_export_key(char *str)
@@ -18,7 +30,7 @@ char	*get_export_key(char *str)
 	{
 		if (str[i] == '=')
 			break ;
-		key[i] = str[i];		
+		key[i] = str[i];
 	}
 	key[i] = 0;
 	return (key);
@@ -38,25 +50,24 @@ char	*get_export_value(char *str)
 	return (value);
 }
 
-int		is_valid_data(char *data)
+int	is_valid_data(char *data)
 {
 	int		i;
 
 	i = 0;
 	if ((ft_isalpha(data[i]) || data[i] == '_'))
 	{
-		while(data[++i] && data[i] != '=')
+		while (data[++i] && data[i] != '=')
 		{
-			// printf("%c", data[i]);
 			if (!ft_isalnum(data[i]) && data[i] != '=' && data[i] != '_')
 				return (0);
 		}
 		return (1);
 	}
-	return(0);
+	return (0);
 }
 
-int	empty_export()
+int	empty_export(void)
 {
 	t_env	*tmp;
 
@@ -64,19 +75,19 @@ int	empty_export()
 	while (tmp->next != NULL)
 	{
 		printf("declare -x %s", tmp->name);
-		if(tmp->value)
-			printf("=\"%s\"",tmp->value);
+		if (tmp->value)
+			printf("=\"%s\"", tmp->value);
 		printf("\n");
 		tmp = tmp->next;
 	}
 	printf("declare -x %s", tmp->name);
-	if(tmp->value)
-		printf("=\"%s\"",tmp->value);
+	if (tmp->value)
+		printf("=\"%s\"", tmp->value);
 	printf("\n");
 	return (0);
 }
 
-int exec_export(char **cmd)
+int	exec_export(char **cmd)
 {
 	char	*key;
 	char	*value;
@@ -95,12 +106,12 @@ int exec_export(char **cmd)
 			}
 			else
 			{
-				printf("minishell: %s: `%s': not a valid identifier\n", cmd[0], cmd[i]);
+				printf("minishell: %s: `%s': not a valid identifier\n",
+					cmd[0], cmd[i]);
 				return (1);
 			}
 		}
 		return (0);
 	}
 	return (empty_export());
-
 }

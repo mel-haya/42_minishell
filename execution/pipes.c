@@ -1,23 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 15:20:36 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/05 04:33:03 by mel-haya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 
 void	dup_fds(t_command *cmd, int fds[2], int input_fd)
 {
-	// the first command won't be piped && the next one will be
-	// we should output on the fd[1] , input fd stay the same
 	if (cmd->is_piped == 0 && cmd->next && cmd->next->is_piped == 1)
 	{
 		dup2(g_shell._savein, STDIN_FILENO);
 		dup2(fds[1], 1);
 	}
-	// cmd is piped and the next one too this means that we are one the middles command
-	// so we should read from the input fd && output on fd[1]
 	else if (cmd->is_piped == 1 && cmd->next && cmd->next->is_piped == 1)
 	{
 		dup2(input_fd, 0);
 		dup2(fds[1], 1);
 	}
-	// if the cmd is piped and there is no others cmds so its the last one
-	// we should read from the input fd and output on the normal stdout
 	else
 		dup2(input_fd, 0);
 }
@@ -25,7 +31,7 @@ void	dup_fds(t_command *cmd, int fds[2], int input_fd)
 void	execute_pipcmd(t_command *cmd)
 {
 	if (cmd && !cmd->redirection)
-		command_exec(g_shell.env, cmd);
+		command_exec(cmd);
 	else
 		redir_exec(cmd);
 }
@@ -36,31 +42,26 @@ void	duper(t_command *cmd, int fds[2], int input_fd)
 	close(fds[0]);
 	close(fds[1]);
 	close(input_fd);
-	//then exec the cmd and kill child process
 	execute_pipcmd(cmd);
 	exit(1);
 }
 
-int		save_input_fd(t_command *cmd, int fds[2], int input_fd)
+int	save_input_fd(t_command *cmd, int fds[2], int input_fd)
 {
-	// close all the fds we are done using
 	close(fds[1]);
-	// close saved input fd only in the middle pipes
-//	if (input_fd)
 	close(input_fd);
-	// close the read input only in the last pipe
 	input_fd = fds[0];
 	if (cmd->next == NULL)
 		close(fds[0]);
 	return (input_fd);
 }
 
-void	pipes()
+void	pipes(void)
 {
-	int		fds[2];
-	int		pid;
-	int		intput_fd;
-	t_command *tmp;
+	t_command	*tmp;
+	int			fds[2];
+	int			pid;
+	int			intput_fd;
 
 	intput_fd = -1;
 	tmp = g_shell.cmds;
@@ -75,11 +76,9 @@ void	pipes()
 		dup2(g_shell._savein, STDIN_FILENO);
 		dup2(g_shell._saveout, STDOUT_FILENO);
 		if (tmp->next == NULL)
-			break;
+			break ;
 		tmp = tmp->next;
 	}
 	while (wait(&pid) != -1)
 		;
-	g_shell.is_forked = 0;
-	// g_shell.status = get_exitvalue(pid);
 }

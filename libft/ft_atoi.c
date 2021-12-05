@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 05:27:35 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/06 07:50:30 by mhalli           ###   ########.fr       */
+/*   Updated: 2021/12/05 05:34:17 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		overlong(long result, long sign)
+int	overlong(long result, long sign)
 {
 	if (result > 2147483648 && sign == -1)
 		return (0);

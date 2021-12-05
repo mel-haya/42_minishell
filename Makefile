@@ -13,7 +13,9 @@ SANITIZE = -fsanitize=address -g
 SRC = execution/execution.c execution/utils.c execution/lst_constructor.c execution/lst_destructor.c \
 	execution/builtins/echo_builtin.c execution/builtins/pwd_builtin.c execution/builtins/cd_builtin.c \
 	execution/builtins/export_builtin.c execution/builtins/unset_builtin.c execution/builtins/env_builtin.c \
-	execution/builtins/exit_builtin.c execution/redirections.c execution/pipes.c \
+	execution/builtins/exit_builtin.c execution/builtins/builtins.c execution/builtins/builtins_utils.c\
+	execution/redirections/redirections.c execution/redirections/redirections_utils.c \
+	execution/pipes.c execution/command_exec.c \
 	\
 	libft/ft_atoi.c\
 	libft/ft_bzero.c\

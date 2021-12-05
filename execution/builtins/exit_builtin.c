@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_builtin.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 14:26:24 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/04 14:26:27 by mhalli           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../execution.h"
 
 int	is_nbr(char *str)
@@ -34,18 +46,21 @@ int	is_int(char *str)
 	return (1);
 }
 
+int	exit_error(char *cmdName)
+{
+	ft_putendl_fd("exit", 1);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(cmdName, 2);
+	ft_putendl_fd(": numeric argument required", 2);
+	return (255);
+}
+
 void	exec_exit(char **cmd)
 {
 	if (cmd[1] && cmd[2] == NULL)
 	{
 		if (!is_int(cmd[1]) || !is_nbr(cmd[1]))
-		{
-			ft_putendl_fd("exit", 1);
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(cmd[1], 2);
-			ft_putendl_fd(": numeric argument required", 2);
-			exit(255);
-		}
+			exit(exit_error(cmd[1]));
 		else
 		{
 			ft_putendl_fd("exit", 1);

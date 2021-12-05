@@ -1,0 +1,16 @@
+*********************
+
+expand $? as 0 after pipe FIXED
+
+*********************
+
+cat | cat > a with "control \"
+cat | cat | cat | cat | cat same error FIXED
+
+*********************
+
+update exit status to 0 after redirection without cmds
+
+*********************
+
+unsetting the first env cause double free

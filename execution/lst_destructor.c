@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_destructor.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 17:03:06 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/04 17:03:07 by mhalli           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 
 void	exit_err(char *msg, char *output, int fd)
@@ -7,21 +19,3 @@ void	exit_err(char *msg, char *output, int fd)
 	ft_putstr_fd(": ", fd);
 	ft_putendl_fd(output, fd);
 }
-
-// void	free_lst(t_env **lst)
-// {
-// 	t_env	*tmp;
-
-// 	if (lst)
-// 	{
-// 		while (*lst)
-// 		{
-// 			tmp = (*lst)->next;
-// 			free((*lst)->key);
-// 			free((*lst)->value);
-// 			free(*lst);
-// 			*lst = tmp;
-// 		}
-// 		*lst = NULL;
-// 	}
-// }
