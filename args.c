@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 10:25:24 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/05 20:40:15 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	skip_arg(char *cmd, int i)
 			return (i);
 		if (!flag && (cmd[i] == 34 || cmd[i] == 39))
 			flag = cmd[i];
-		else if (flag == cmd[i + 1])
+		else if (flag == cmd[i])
 			flag = 0;
 		i++;
 	}

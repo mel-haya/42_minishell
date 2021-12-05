@@ -25,7 +25,7 @@ int	open_file(char *f, t_redirection *tmp)
 	return (file);
 }
 
-void	exec_redir(t_redirection *redir)
+int	exec_redir(t_redirection *redir)
 {
 	t_redirection	*tmp;
 	int				file;
@@ -45,6 +45,7 @@ void	exec_redir(t_redirection *redir)
 			break ;
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 void	redir_exec(t_command *cmd)
@@ -52,16 +53,13 @@ void	redir_exec(t_command *cmd)
 	char	*err_msg;
 	int		fds[2];
 
-	if (filter_redir(cmd->redirection))
-	{
-		err_msg = path_case_error();
-		fds_saver(fds, 0);
-		exec_redir(cmd->redirection);
-		if (is_builtin(cmd->args[0]) == 1)
-			exec_builtin(cmd->args);
-		else if (!is_builtin(cmd->args[0]))
-			exec_cmd(get_path(), cmd->args, err_msg);
-		fds_saver(fds, 1);
-		free(err_msg);
-	}
+	err_msg = path_case_error();
+	fds_saver(fds, 0);
+	g_shell.status = exec_redir(cmd->redirection);
+	if (is_builtin(cmd->args[0]) == 1)
+		g_shell.status = exec_builtin(cmd->args);
+	else if (!is_builtin(cmd->args[0]))
+		exec_cmd(get_path(), cmd->args, err_msg);
+	fds_saver(fds, 1);
+	free(err_msg);
 }

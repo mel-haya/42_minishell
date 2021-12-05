@@ -12,15 +12,79 @@
 
 #include "execution.h"
 
+int		get_listLenght(t_env *env)
+{
+	int		lenght;
+	t_env	*tmp;
+
+	lenght = 0;
+	if (env)
+	{
+		tmp = g_shell.env;
+		while (tmp)
+		{
+			if (tmp->next == NULL)
+				return (lenght);
+			tmp = tmp->next;
+			lenght++;
+		}
+	}
+	return (lenght);
+}
+
+char	*fill_line(char *name, char *value)
+{
+	char *str;
+	char *tmp;
+
+	tmp = ft_strjoin(name, "=");
+	str = ft_strjoin(tmp, value);
+	free(tmp);
+	return (str);
+}
+
+char	**construct_env()
+{
+	t_env *tmp;
+	char **env;
+	int		i;
+
+	i = 0;
+	if (g_shell.env)
+	{
+		env = malloc(sizeof(char *) * (get_listLenght(g_shell.env) + 1));
+		tmp = g_shell.env;
+		while (tmp)
+		{
+			env[i] = fill_line(tmp->name, tmp->value);
+			if (tmp->next == NULL)
+			{
+				env[i] = NULL;
+				return (env);
+			}
+			tmp = tmp->next;
+			i++;
+		}
+	}
+	return (NULL);
+}
+
 void	exec(char *bin, char **cmd, char *err_output)
 {
-	if (execve(bin, cmd, NULL) == -1)
+	char **env;
+
+	env = construct_env();
+	if (execve(bin, cmd, env) == -1)
 	{
+		free_arr(env);
 		exit_err(cmd[0], err_output, 2);
 		exit(127);
 	}
 	else
+	{
+		free_arr(env);
 		exit(126);
+	}
 }
 
 char	*build_cmdpath(char *path, char *cmd)
@@ -41,7 +105,7 @@ char	*get_bin(char **bin_path, char *cmd)
 	char	*cmd_path;
 
 	i = -1;
-	if (!bin_path)
+	if (!bin_path && cmd[0] != '/' && cmd[0] != '.')
 		return (0);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{

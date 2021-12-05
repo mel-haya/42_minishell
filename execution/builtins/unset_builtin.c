@@ -30,21 +30,25 @@ int	filter_input(char *str)
 void	free_values(t_env *lst)
 {
 	free(lst->name);
+	lst->name = NULL;
 	free(lst->value);
+	lst->value = NULL;
 	free(lst);
+	lst = NULL;
 }
 
-void	delete_node(t_env *lst, t_env *target)
+void	delete_node(t_env *target)
 {
 	t_env	*tmp;
 	t_env	*left;
 	t_env	*right;
+	t_env	*temp1;
 
-	tmp = lst;
+	tmp = g_shell.env;
 	if (target == tmp)
 	{
-		lst = tmp->next;
-		free(tmp);
+		g_shell.env = g_shell.env->next;
+		free_values(tmp);
 		return ;
 	}
 	while (tmp->next != NULL)
@@ -69,9 +73,9 @@ void	unset_element(char *element)
 	tmp = g_shell.env;
 	while (tmp)
 	{
-		if (!ft_strncmp(element, tmp->name, ft_strlen(element)))
+		if (!strcmp(element, tmp->name))
 		{
-			delete_node(g_shell.env, tmp);
+			delete_node(tmp);
 			break ;
 		}
 		if (tmp->next == NULL)

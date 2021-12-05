@@ -19,13 +19,13 @@ int	exec_env(char **cmd)
 	if (arr_lenght(cmd) == 1)
 	{
 		tmp = g_shell.env;
-		while (tmp->next != NULL)
+		while (tmp && tmp->next != NULL)
 		{
 			if (tmp->value)
 				printf("%s=%s\n", tmp->name, tmp->value);
 			tmp = tmp->next;
 		}
-		if (tmp->value)
+		if (tmp && tmp->value)
 			printf("%s=%s\n", tmp->name, tmp->value);
 	}
 	return (0);
