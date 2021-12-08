@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 15:55:51 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/05 09:23:53 by mhalli           ###   ########.fr       */
+/*   Updated: 2021/12/06 23:05:59 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		size_to_allocate(int n)
+int	size_to_allocate(int n)
 {
 	int		i;
 
@@ -62,7 +62,8 @@ char	*ft_itoa(int n)
 
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
-	if (!(num = (char *)malloc(sizeof(char) * (size_to_allocate(n) + 1))))
+	num = (char *)malloc(sizeof(char) * (size_to_allocate(n) + 1));
+	if (!num)
 		return (0);
 	j = size_to_allocate(n);
 	num[j] = '\0';

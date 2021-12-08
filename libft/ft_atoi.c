@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 05:27:35 by mhalli            #+#    #+#             */
-/*   Updated: 2021/12/05 05:34:17 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/06 23:02:11 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	overlong(long result, long sign)
 	return (0);
 }
 
-int		ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	long	result;
 	long	sign;
@@ -41,8 +41,8 @@ int		ft_atoi(const char *str)
 		if (*str < 48 || *str > 57)
 			return (result * sign);
 		result = (result * 10) + (*str - '0');
-		if ((result > 2147483648 && sign == -1)
-				|| (result > 2147483647 && sign == 1))
+		if ((result > 2147483648 && sign == -1) \
+		|| (result > 2147483647 && sign == 1))
 			return (overlong(result, sign));
 		str++;
 	}

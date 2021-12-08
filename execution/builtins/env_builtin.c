@@ -21,11 +21,11 @@ int	exec_env(char **cmd)
 		tmp = g_shell.env;
 		while (tmp && tmp->next != NULL)
 		{
-			if (tmp->value)
+			if (tmp->value && ft_strlen(tmp->value) > 1)
 				printf("%s=%s\n", tmp->name, tmp->value);
 			tmp = tmp->next;
 		}
-		if (tmp && tmp->value)
+		if (tmp && tmp->value && ft_strlen(tmp->value) > 1)
 			printf("%s=%s\n", tmp->name, tmp->value);
 	}
 	return (0);

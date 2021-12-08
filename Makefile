@@ -15,7 +15,7 @@ SRC = execution/execution.c execution/utils.c execution/lst_constructor.c execut
 	execution/builtins/export_builtin.c execution/builtins/unset_builtin.c execution/builtins/env_builtin.c \
 	execution/builtins/exit_builtin.c execution/builtins/builtins.c execution/builtins/builtins_utils.c\
 	execution/redirections/redirections.c execution/redirections/redirections_utils.c \
-	execution/pipes.c execution/command_exec.c \
+	execution/pipes.c execution/command_exec.c execution/command_utils.c\
 	\
 	libft/ft_atoi.c\
 	libft/ft_bzero.c\
@@ -34,7 +34,6 @@ SRC = execution/execution.c execution/utils.c execution/lst_constructor.c execut
 	libft/ft_memset.c\
 	libft/ft_putchar_fd.c\
 	libft/ft_putendl_fd.c\
-	libft/ft_putnbr_fd.c\
 	libft/ft_putstr_fd.c\
 	libft/ft_strchr.c\
 	libft/ft_strdup.c\
@@ -42,12 +41,9 @@ SRC = execution/execution.c execution/utils.c execution/lst_constructor.c execut
 	libft/ft_strlcat.c\
 	libft/ft_strlcpy.c\
 	libft/ft_strlen.c\
-	libft/ft_strmapi.c\
 	libft/ft_strncmp.c\
 	libft/ft_strnstr.c\
 	libft/ft_strrchr.c\
-	libft/ft_strtrim.c\
-	libft/ft_substr.c\
 	libft/ft_tolower.c\
 	libft/ft_toupper.c\
 	libft/ft_split.c\

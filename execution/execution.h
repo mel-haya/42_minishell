@@ -46,4 +46,6 @@ void	exec_cmd(char *path, char **cmd, char *err_output);
 
 void	free_arr(char **arr);
 
+char	**construct_env(void);
+
 #endif

@@ -33,7 +33,7 @@ int	exec_redir(t_redirection *redir)
 	tmp = redir;
 	while (tmp)
 	{
-		file = open_file(redir->file, tmp);
+		file = open_file(tmp->file, tmp);
 		if (tmp->token == '>' && !tmp->append)
 			dup2(file, 1);
 		else if (tmp->token == '>' && tmp->append)

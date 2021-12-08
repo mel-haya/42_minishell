@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 05:11:51 by mel-haya          #+#    #+#             */
-/*   Updated: 2021/12/05 07:13:30 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/06 22:36:29 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <dirent.h>
 # include <sys/errno.h>
 # include "execution/execution.h"
 

@@ -6,84 +6,36 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 16:55:22 by mhalli            #+#    #+#             */
-/*   Updated: 2021/12/05 04:38:40 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/06 22:35:36 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int		get_listLenght(t_env *env)
-{
-	int		lenght;
-	t_env	*tmp;
-
-	lenght = 0;
-	if (env)
-	{
-		tmp = g_shell.env;
-		while (tmp)
-		{
-			if (tmp->next == NULL)
-				return (lenght);
-			tmp = tmp->next;
-			lenght++;
-		}
-	}
-	return (lenght);
-}
-
-char	*fill_line(char *name, char *value)
-{
-	char *str;
-	char *tmp;
-
-	tmp = ft_strjoin(name, "=");
-	str = ft_strjoin(tmp, value);
-	free(tmp);
-	return (str);
-}
-
-char	**construct_env()
-{
-	t_env *tmp;
-	char **env;
-	int		i;
-
-	i = 0;
-	if (g_shell.env)
-	{
-		env = malloc(sizeof(char *) * (get_listLenght(g_shell.env) + 1));
-		tmp = g_shell.env;
-		while (tmp)
-		{
-			env[i] = fill_line(tmp->name, tmp->value);
-			if (tmp->next == NULL)
-			{
-				env[i] = NULL;
-				return (env);
-			}
-			tmp = tmp->next;
-			i++;
-		}
-	}
-	return (NULL);
-}
-
 void	exec(char *bin, char **cmd, char *err_output)
 {
-	char **env;
+	char	**env;
+	DIR		*tmp;
 
 	env = construct_env();
-	if (execve(bin, cmd, env) == -1)
+	if (execve(bin, cmd, env) < 0)
 	{
 		free_arr(env);
-		exit_err(cmd[0], err_output, 2);
-		exit(127);
-	}
-	else
-	{
-		free_arr(env);
-		exit(126);
+		tmp = opendir(cmd[0]);
+		if (tmp)
+		{
+			free(tmp);
+			exit_err(cmd[0], "is a directory", 2);
+			exit(126);
+		}
+		else
+		{
+			if (cmd[0][0] == '/')
+				exit_err(cmd[0], "No such file or directory", 2);
+			else
+				exit_err(cmd[0], err_output, 2);
+			exit(127);
+		}
 	}
 }
 

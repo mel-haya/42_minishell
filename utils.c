@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 11:05:28 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/06 23:56:54 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,18 @@ int	check_file(t_redirection *r)
 
 	fd = open(r->file, O_RDONLY);
 	err = strerror(errno);
-	close(fd);
+	if (fd == -1 && (errno == 13 || r->token == '<'))
+	{
+		printf("Minishell: %s: %s\n", r->file, err);
+		g_shell.status = 1;
+		return (0);
+	}
 	if (fd == -1 && r->token == '>')
 	{
 		fd = open(r->file, O_RDONLY | O_CREAT, 0644);
 		close(fd);
 		return (1);
 	}
-	else if (fd == -1)
-	{
-		printf("Minishell: %s: %s\n", r->file, err);
-		g_shell.status = 1;
-		return (0);
-	}
-	else
-		return (1);
+	close(fd);
+	return (1);
 }

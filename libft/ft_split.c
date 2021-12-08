@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   newsplit.c                                         :+:      :+:    :+:   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhalli <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 03:51:30 by mhalli            #+#    #+#             */
-/*   Updated: 2019/12/17 01:48:33 by mhalli           ###   ########.fr       */
+/*   Updated: 2021/12/06 23:12:17 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		howmanyword(const char *s, char c)
+static int	howmanyword(const char *s, char c)
 {
 	int		key;
 	int		words;
@@ -35,7 +35,7 @@ static int		howmanyword(const char *s, char c)
 	return (words);
 }
 
-static void		*frree(char **tab, int j)
+static void	*frree(char **tab, int j)
 {
 	while (j--)
 		free(tab[j]);
@@ -43,7 +43,7 @@ static void		*frree(char **tab, int j)
 	return (NULL);
 }
 
-static int		wordlenght(const char *s, char c, int i)
+static int	wordlenght(const char *s, char c, int i)
 {
 	int		lenght;
 
@@ -56,7 +56,7 @@ static int		wordlenght(const char *s, char c, int i)
 	return (lenght);
 }
 
-static char		**dotherest(const char *s, char c, char **tab)
+static char	**dotherest(const char *s, char c, char **tab)
 {
 	int		i;
 	int		j;
@@ -82,13 +82,14 @@ static char		**dotherest(const char *s, char c, char **tab)
 	return (tab);
 }
 
-char			**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**tab;
 
 	if (!s)
 		return (NULL);
-	if (!(tab = malloc(8 * (howmanyword(s, c) + 1))))
+	tab = malloc(8 * (howmanyword(s, c) + 1));
+	if (!tab)
 		return (NULL);
 	return (dotherest(s, c, tab));
 }
