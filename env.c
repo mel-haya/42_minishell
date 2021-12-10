@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:20:30 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/10 02:21:53 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 03:10:04 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ t_env	*get_env_by_name(char *name)
 		len++;
 	while (tmp)
 	{
-		if (!ft_strncmp(name, tmp->name, len) && \
-		(int)ft_strlen(tmp->name) == len)
+		if (!ft_strncmp(name, tmp->name, len) && ft_strlen(tmp->name) == len)
 			return (tmp);
 		tmp = tmp->next;
 	}
@@ -48,17 +47,16 @@ void	fill_env(char **envp)
 	t_env	*tmp;
 
 	tmp = g_shell.env;
-	i = 0;
-	while (envp[i])
+	i = -1;
+	while (envp[++i])
 	{
 		name_size = env_name_len(envp[i]);
 		tmp->name = malloc(name_size + 1);
 		if (!(tmp->name))
 			exit_malloc_fail();
-		tmp->value = get_value(envp[i], name_size + 1);
+		tmp->value = get_value(envp[i], name_size);
 		ft_strlcpy(tmp->name, envp[i], name_size + 1);
-		i++;
-		if (envp[i])
+		if (envp[i + 1])
 		{
 			tmp->next = malloc(sizeof(t_env));
 			tmp = tmp->next;
@@ -101,6 +99,8 @@ int	expand_status(char **arg, int index)
 	value = ft_itoa(g_shell.status);
 	ret = index + ft_strlen(value);
 	new = malloc(ft_strlen(*arg) + ft_strlen(value) - 1);
+	if (!new)
+		exit_malloc_fail();
 	ft_strlcpy(new, *arg, index + 1);
 	ft_strlcpy(new + index, value, ft_strlen(value) + 1);
 	ft_strlcpy(new + index + ft_strlen(value), (*arg) + \

@@ -56,7 +56,7 @@ tmp:
 	mkdir tmp
 
 $(NAME): tmp
-	@gcc $(SRC) -lreadline -o $(NAME) $(READLINE) $(FLAGS)
+	@gcc $(SRC) -lreadline -o $(NAME) $(READLINE)
 
 clean:
 	@rm -rf *.o
