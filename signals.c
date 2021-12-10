@@ -16,13 +16,14 @@ void	global_sig_handler(int sig)
 {
 	if (sig == SIGINT && !g_shell.is_forked)
 	{
+		g_shell.status = 1;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	else if (sig == SIGQUIT && g_shell.is_forked == 1)
-		write(2, "QUIT\n", 5);
+		write(2, "Quit: 3\n", 5);
 }
 
 void	heredoc_sig_handler(int sig)

@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:09:21 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/03 11:08:29 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 02:06:22 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ int	get_redirection(char **str, t_redirection *r, int i)
 		return (-1);
 	len = skip_arg(*str, j);
 	r->file = malloc(len - j + 1);
+	if (!(r->file))
+		exit_malloc_fail();
 	ft_strlcpy(r->file, (*str) + j, len - j + 1);
 	if (r->token == '<' && r->append)
 		r->file = here_doc(r->file);
@@ -108,7 +110,5 @@ int	get_redirection(char **str, t_redirection *r, int i)
 		return (-1);
 	remove_quotes(&(r->file));
 	remove_str(str, i, len - i);
-	if (!check_file(r))
-		return (-1);
 	return (0);
 }

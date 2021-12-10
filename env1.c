@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:20:30 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/05 21:00:20 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 02:20:35 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ char	*get_after(char *str, char *after, int index)
 		return (after);
 	if ((!ft_isalpha(*after) && *after != '_'))
 		return (after + 1);
-	while (*after && (*after != 34 && *after != 39 \
-	&& *after != ' ' && *after != '$'))
+	while (*after && (ft_isalnum(*after) || *after == '_'))
 		after++;
 	return (after);
 }
@@ -32,6 +31,7 @@ int	expand_env(char **arg, int index)
 	char	*value;
 	char	*new;
 
+	after = NULL;
 	if ((*arg)[index + 1] == '?')
 		return (expand_status(arg, index));
 	value = untokenize_env((*arg) + index + 1);
@@ -40,6 +40,8 @@ int	expand_env(char **arg, int index)
 	after = get_after(*arg, after, index);
 	len = index + ft_strlen(value) + ft_strlen(after) + 2;
 	new = malloc(len);
+	if (!new)
+		exit_malloc_fail();
 	ft_strlcpy(new, *arg, index + 1);
 	ft_strlcpy(new + index, value, ft_strlen(value) + 1);
 	ft_strlcpy(new + index + ft_strlen(value), after, ft_strlen(after) + 1);
@@ -96,4 +98,11 @@ void	expand_line(char **line)
 			i++;
 		}
 	}
+}
+
+void	exit_malloc_fail(void)
+{
+	printf("Minishell: Malloc failed\n");
+	free_cmds();
+	exit(1);
 }

@@ -22,7 +22,8 @@ int	input_to_file(char *file, char *delimeter, int mode)
 	while (1)
 	{
 		line = readline(">");
-		if (!line || !ft_strncmp(line, delimeter, ft_strlen(line)))
+		if (!line || !ft_strncmp(line, delimeter, ft_strlen(line) \
+			+ ft_strlen(delimeter)))
 			break ;
 		if (!*line)
 			continue ;

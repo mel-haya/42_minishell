@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mourad <mourad@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 16:30:29 by mourad            #+#    #+#             */
-/*   Updated: 2021/10/26 16:33:05 by mourad           ###   ########.fr       */
+/*   Updated: 2021/12/10 02:16:02 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	free_redirection(void)
 void	free_cmds(void)
 {
 	t_command		*tmp;
-	t_redirection	*red;
 	int				i;
 
 	while (g_shell.cmds)

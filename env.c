@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:20:30 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/05 03:09:04 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 02:21:53 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ t_env	*get_env_by_name(char *name)
 
 	tmp = g_shell.env;
 	len = 0;
-	while (name[len] && (name[len] != 34 && name[len] != 39 \
-	&& name[len] != ' ' && name[len] != '$'))
+	while (name[len] && (ft_isalnum(name[len]) || name[len] == '_'))
 		len++;
 	while (tmp)
 	{
-		if (!ft_strncmp(name, tmp->name, len) && ft_strlen(tmp->name) == len)
+		if (!ft_strncmp(name, tmp->name, len) && \
+		(int)ft_strlen(tmp->name) == len)
 			return (tmp);
 		tmp = tmp->next;
 	}
@@ -36,17 +36,16 @@ int	env_name_len(char *env)
 	int	i;
 
 	i = 0;
-	while (env[i] != '=')
+	while (env[i] && env[i] != '=')
 		i++;
 	return (i);
 }
 
 void	fill_env(char **envp)
 {
+	int		name_size;
 	int		i;
 	t_env	*tmp;
-	int		name_size;
-	int		test;
 
 	tmp = g_shell.env;
 	i = 0;
@@ -54,19 +53,20 @@ void	fill_env(char **envp)
 	{
 		name_size = env_name_len(envp[i]);
 		tmp->name = malloc(name_size + 1);
-		test = (ft_strlen(envp[i]) - name_size);
-		tmp->value = malloc(test);
+		if (!(tmp->name))
+			exit_malloc_fail();
+		tmp->value = get_value(envp[i], name_size + 1);
 		ft_strlcpy(tmp->name, envp[i], name_size + 1);
-		ft_strlcpy(tmp->value, envp[i] + name_size + 1, \
-		ft_strlen(envp[i]) - name_size + 1);
-		if (envp[i + 1])
+		i++;
+		if (envp[i])
 		{
 			tmp->next = malloc(sizeof(t_env));
 			tmp = tmp->next;
+			if (!tmp)
+				exit_malloc_fail();
 		}
 		else
 			tmp->next = NULL;
-		i++;
 	}
 }
 

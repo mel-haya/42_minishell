@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:32:40 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/06 23:56:54 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 02:07:41 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	remove_str(char **str, int i, int count)
 
 	len = ft_strlen(*str) - count + 1;
 	new = malloc(len);
+	if (!new)
+		exit_malloc_fail();
 	after = *str + i + count;
 	(*str)[i] = 0;
 	ft_strlcpy(new, *str, i + 1);
@@ -78,7 +80,7 @@ int	check_file(t_redirection *r)
 	{
 		printf("Minishell: %s: %s\n", r->file, err);
 		g_shell.status = 1;
-		return (0);
+		return (1);
 	}
 	if (fd == -1 && r->token == '>')
 	{

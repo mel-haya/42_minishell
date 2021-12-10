@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:39:06 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/05 21:07:48 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 01:56:07 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,16 @@ int	get_args(char *cmd, t_command *new)
 	j = 0;
 	i = 0;
 	new->args = malloc((get_args_num(cmd) + 1) * sizeof(char *));
+	if (!(new->args))
+		exit_malloc_fail();
 	while (cmd[i] == ' ')
 		i++;
 	while (cmd[i] && cmd[i] != '|')
 	{
 		skip = skip_arg(cmd, i);
 		new->args[j] = malloc(skip - i + 1);
+		if (!(new->args[j]))
+			exit_malloc_fail();
 		ft_strlcpy(new->args[j], cmd + i, skip - i + 1);
 		i = skip;
 		while (cmd[i] == ' ')

@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:31:26 by mourad            #+#    #+#             */
-/*   Updated: 2021/12/05 21:04:03 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 02:23:38 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,21 @@ int	init_cmd(char **cmd, t_command *tmp, int i)
 	return (get_redirections(cmd, tmp, i));
 }
 
-int	check_next_cmd(char *str, int i)
+int	check_next_cmd(char *str, int i, t_command	*tmp)
 {
 	i++;
 	while (str[i] == ' ')
 		i++;
 	if (!str[i])
 	{
-		printf("minishell : syntax error near unexpected token '|'\n");
+		printf("minishell: syntax error near unexpected token '|'\n");
 		g_shell.status = 1;
 		return (-1);
 	}
+	tmp->next = malloc(sizeof(t_command));
+	if (!(tmp->next))
+		exit_malloc_fail();
+	tmp->next->is_piped = 1;
 	return (i);
 }
 
@@ -40,6 +44,7 @@ int	get_cmds(char **cmd)
 {
 	int			i;
 	t_command	*tmp;
+	int			arg_len;
 
 	i = 0;
 	tmp = g_shell.cmds;
@@ -47,16 +52,15 @@ int	get_cmds(char **cmd)
 	{
 		if (init_cmd(cmd, tmp, i) == -1)
 			return (-1);
-		i += get_args(*cmd + i, tmp);
-		if (quote_args(tmp))
+		arg_len = get_args(*cmd + i, tmp);
+		i += arg_len;
+		if (arg_len == -1 || quote_args(tmp))
 			return (-1);
 		if ((*cmd)[i] == '|')
 		{
-			i = check_next_cmd(*cmd, i);
+			i = check_next_cmd(*cmd, i, tmp);
 			if (i == -1)
 				return (i);
-			tmp->next = malloc(sizeof(t_command));
-			tmp->next->is_piped = 1;
 			tmp = tmp->next;
 		}
 	}
@@ -110,6 +114,8 @@ int	check_line(char **line)
 		return (1);
 	}
 	g_shell.cmds = malloc(sizeof(t_command));
+	if (!(g_shell.cmds))
+		exit_malloc_fail();
 	g_shell.cmds->is_piped = 0;
 	if (get_cmds(line) == -1)
 	{
@@ -125,8 +131,9 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 
 	init_global();
-	ignctl();
 	fill_env(envp);
+	(void)argc;
+	(void)argv;
 	while (1)
 	{
 		set_global_signals();

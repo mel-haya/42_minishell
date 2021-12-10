@@ -6,7 +6,7 @@
 /*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 05:11:51 by mel-haya          #+#    #+#             */
-/*   Updated: 2021/12/06 22:36:29 by mel-haya         ###   ########.fr       */
+/*   Updated: 2021/12/10 01:47:04 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,5 @@ void	add_node(t_env **lst, t_env *new_node);
 t_env	*init_node(char *key, char *value);
 int		command_exec(t_command *cmd);
 void	redir_exec(t_command *cmd);
+void	exit_malloc_fail(void);
 #endif
