@@ -1,10 +1,24 @@
-#include "execution.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_constructor.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 17:02:58 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/10 16:06:03 by mel-haya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 t_env	*init_node(char *key, char *value)
 {
 	t_env	*lst;
 
 	lst = (t_env *)malloc(sizeof(t_env));
+	if (!lst)
+		return (NULL);
 	lst->name = key;
 	lst->value = value;
 	lst->next = NULL;

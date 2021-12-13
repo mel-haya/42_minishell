@@ -1,17 +1,32 @@
-#include "../execution.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_builtin.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 14:25:32 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/10 16:08:41 by mel-haya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	exec_env(char **cmd)
+#include "../../includes/minishell.h"
+
+int	exec_env(char **cmd)
 {
 	t_env	*tmp;
 
 	if (arr_lenght(cmd) == 1)
 	{
 		tmp = g_shell.env;
-		while (tmp->next != NULL)
+		while (tmp && tmp->next != NULL)
 		{
-			printf("%s=%s\n", tmp->name, tmp->value);
+			if (tmp->value)
+				printf("%s=%s\n", tmp->name, tmp->value);
 			tmp = tmp->next;
 		}
-		printf("%s%s\n", tmp->name, tmp->value);
+		if (tmp && tmp->value)
+			printf("%s=%s\n", tmp->name, tmp->value);
 	}
+	return (0);
 }

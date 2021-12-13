@@ -1,4 +1,16 @@
-#include "../execution.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo_builtin.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 14:19:36 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/10 16:08:36 by mel-haya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 int	is_option(char *cmd)
 {
@@ -32,20 +44,20 @@ int	toprint(char **cmd, int option)
 	return (i);
 }
 
-void	exec_echo(char **cmd)
+int	exec_echo(char **cmd)
 {
-    int		option;
+	int		option;
 	int		index;
-    
+
 	if (arr_lenght(cmd) > 1)
 	{
-    	option = is_option(cmd[1]);
+		option = is_option(cmd[1]);
 		index = toprint(cmd, option);
 		while (cmd[index])
 		{
 			ft_putstr_fd(cmd[index], 1);
 			if (cmd[index + 1] != NULL)
-					ft_putstr_fd(" ", 1);
+				ft_putstr_fd(" ", 1);
 			index++;
 		}
 		if (!option)
@@ -53,4 +65,5 @@ void	exec_echo(char **cmd)
 	}
 	else
 		ft_putchar_fd('\n', 1);
+	return (0);
 }

@@ -1,4 +1,16 @@
-#include "../execution.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_builtin.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/04 14:26:24 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/10 16:08:45 by mel-haya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 int	is_nbr(char *str)
 {
@@ -34,18 +46,21 @@ int	is_int(char *str)
 	return (1);
 }
 
-void	exec_exit(char **cmd)
+int	exit_error(char *cmdname)
+{
+	ft_putendl_fd("exit", 1);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(cmdname, 2);
+	ft_putendl_fd(": numeric argument required", 2);
+	return (255);
+}
+
+int	exec_exit(char **cmd)
 {
 	if (cmd[1] && cmd[2] == NULL)
 	{
 		if (!is_int(cmd[1]) || !is_nbr(cmd[1]))
-		{
-			ft_putendl_fd("exit", 1);
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(cmd[1], 2);
-			ft_putendl_fd(": numeric argument required", 2);
-			exit(255);
-		}
+			exit(exit_error(cmd[1]));
 		else
 		{
 			ft_putendl_fd("exit", 1);
@@ -62,4 +77,5 @@ void	exec_exit(char **cmd)
 		ft_putendl_fd("exit", 1);
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 	}
+	return (1);
 }

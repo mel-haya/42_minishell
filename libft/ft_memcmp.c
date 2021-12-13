@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-haya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mel-haya <mel-haya@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/10 18:54:08 by mel-haya          #+#    #+#             */
-/*   Updated: 2019/10/20 00:14:21 by mel-haya         ###   ########.fr       */
+/*   Created: 2019/10/13 13:44:05 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/06 23:08:16 by mel-haya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	unsigned char	*str1;
-	unsigned char	*str2;
-	int				i;
-	int				len;
+	unsigned int			i;
+	unsigned int			result;
+	const unsigned char		*p1;
+	const unsigned char		*p2;
 
-	len = n;
 	i = 0;
-	str1 = (unsigned char *)s1;
-	str2 = (unsigned char *)s2;
-	while (i < len)
+	p1 = (const unsigned char *)s1;
+	p2 = (const unsigned char *)s2;
+	result = 0;
+	while (n--)
 	{
-		if (str1[i] != str2[i])
-			return (str1[i] - str2[i]);
+		if (p1[i] != p2[i])
+		{
+			result = (p1[i] - p2[i]);
+			return (result);
+		}
 		i++;
 	}
-	return (0);
+	return (result);
 }
